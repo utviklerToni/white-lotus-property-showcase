@@ -1,7 +1,7 @@
 import { createBrowserRouter, data } from 'react-router';
-import { Layout } from './components/Layout';
-import { PropertiesPage } from './pages/PropertiesPage';
-import { RouteError } from './pages/RouteError';
+import { Layout } from './Layout';
+import { PropertiesPage } from '../pages/PropertiesPage';
+import { RouteError } from './RouteError';
 
 export const router = createBrowserRouter([
   {

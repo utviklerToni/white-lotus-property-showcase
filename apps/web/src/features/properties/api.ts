@@ -1,7 +1,7 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import type { Property, PropertyListQuery } from '@white-lotus/shared';
-import { filtersToParams } from '../lib/filters';
-import { request } from './client';
+import { filtersToParams } from './filters';
+import { request } from '../../lib/apiClient';
 
 export function useProperties(filters: PropertyListQuery) {
   const query = filtersToParams(filters).toString();

@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { Link } from 'react-router';
 import { BedDouble, Ruler } from 'lucide-react';
 import type { Property } from '@white-lotus/shared';
-import { cn } from '../lib/cn';
-import { formatArea, formatBeds, formatNumber, formatPrice } from '../lib/format';
-import { imageSources } from '../lib/images';
-import { StatusBadge } from './StatusBadge';
+import { cn } from '../../lib/cn';
+import { formatArea, formatBeds, formatNumber, formatPrice } from '../../lib/format';
+import { imageSources } from '../../lib/images';
+import { StatusBadge } from '../../components/ui/StatusBadge';
 
 // Rendered width of a card image per breakpoint (grid 1 / 2 / 3 columns, page padding, gaps).
 const SIZES = '(min-width: 1024px) 342px, (min-width: 768px) calc(50vw - 68px), calc(100vw - 48px)';

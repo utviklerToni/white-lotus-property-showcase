@@ -1,6 +1,6 @@
 import type { PropertyStatus } from '@white-lotus/shared';
-import { cn } from '../lib/cn';
-import { STATUS_LABELS } from '../lib/format';
+import { cn } from '../../lib/cn';
+import { STATUS_LABELS } from '../../lib/format';
 
 // Champagne for Available stays visible on bright sky photos (D63, D64).
 const STYLES: Record<PropertyStatus, string> = {

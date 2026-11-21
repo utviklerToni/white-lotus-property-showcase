@@ -1,9 +1,9 @@
 import { Link, useSearchParams } from 'react-router';
 import { PROPERTY_STATUSES, type PropertyListQuery } from '@white-lotus/shared';
-import { useLocations } from '../api/properties';
-import { filtersToParams } from '../lib/filters';
-import { STATUS_LABELS } from '../lib/format';
-import { Select } from './Select';
+import { useLocations } from './api';
+import { filtersToParams } from './filters';
+import { STATUS_LABELS } from '../../lib/format';
+import { Select } from '../../components/ui/Select';
 
 const ANY = { value: '', label: 'Any' };
 const BEDROOMS = [ANY, ...[3, 4, 5].map((n) => ({ value: String(n), label: `${n}+` }))];

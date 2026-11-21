@@ -23,6 +23,20 @@ export default tseslint.config(
     plugins: { 'react-hooks': reactHooks },
     rules: reactHooks.configs.recommended.rules,
   },
+  {
+    // components/ui stays generic: it must never import feature code (PLAN section 2).
+    files: ['apps/web/src/components/ui/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            { group: ['**/features/**'], message: 'components/ui must not import from features/.' },
+          ],
+        },
+      ],
+    },
+  },
   // Must stay last: turns off rules that clash with Prettier.
   prettier,
 );

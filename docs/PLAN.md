@@ -42,20 +42,19 @@ Use current stable versions of everything. Tailwind v4 has **no `tailwind.config
 ```
 white-lotus/
 ├── apps/
-│   ├── web/                  # React + Vite + Tailwind
+│   ├── web/                  # React + Vite + Tailwind (hybrid layout, see below)
 │   │   ├── src/
-│   │   │   ├── api/          # fetch client + query hooks
-│   │   │   ├── components/   # PropertyCard, Filters, StatusBadge, EmptyState, Spinner, ...
-│   │   │   ├── pages/
-│   │   │   │   ├── PropertiesPage.tsx
-│   │   │   │   ├── PropertyDetailPage.tsx
-│   │   │   │   └── admin/
-│   │   │   │       ├── AdminPropertiesPage.tsx
-│   │   │   │       ├── PropertyFormPage.tsx   # add + edit share one form
-│   │   │   │       └── AdminInquiriesPage.tsx
-│   │   │   ├── lib/format.ts # ₹ Cr / Lakh formatting, sq ft
-│   │   │   ├── index.css     # Tailwind v4 import + @theme tokens
-│   │   │   └── main.tsx
+│   │   │   ├── app/          # main.tsx, router.tsx, Layout, Header, Footer, RouteError
+│   │   │   ├── components/
+│   │   │   │   └── ui/       # reusable, no business logic: Select, StatusBadge, Skeleton, EmptyState, ErrorState
+│   │   │   ├── features/
+│   │   │   │   ├── properties/  # api.ts (query hooks), filters.ts, FilterBar, PropertyCard(+Skeleton), PropertyListing
+│   │   │   │   ├── inquiries/   # Phase 5: inquiry form + mutation
+│   │   │   │   └── admin/       # Phase 6: admin key, tables, property form
+│   │   │   ├── pages/        # thin route components: PropertiesPage, PropertyDetailPage, admin/*
+│   │   │   ├── lib/          # cn.ts, format.ts (₹ Cr / L, sq ft), images.ts, apiClient.ts
+│   │   │   └── index.css     # Tailwind v4 import + @theme tokens
+│   │   ├── index.html
 │   │   └── vite.config.ts    # tailwind plugin + /api proxy
 │   └── api/                  # Express
 │       ├── src/
@@ -92,6 +91,8 @@ white-lotus/
 ├── AI_USAGE.md
 └── package.json              # workspaces + root scripts
 ```
+
+**Web layout rules.** `components/ui` never imports from `features/` (ESLint `no-restricted-imports` enforces it). Feature code imports `components/ui` and `lib`, never another feature's internals. Pages stay thin: a `<title>`, page copy, and one feature component. New code in Phases 5–6 goes in `features/inquiries` and `features/admin`. The API stays layered (`routes/`, `db/`, `middleware/`): clear at two resources.
 
 Root scripts: `npm run db:migrate`, `npm run db:migrate:test` (same migrations against `DATABASE_URL_TEST`), `npm run db:seed`, `npm run dev` (api + web via `concurrently`), `npm test`, `npm run lint`, `npm run format`, `npm run format:check`, `npm run typecheck`, and `npm run check` (lint + typecheck + test).
 
@@ -358,7 +359,8 @@ then restore the code and confirm green.
 3. **Architecture & decisions** (5–10 sentences): monorepo with shared Zod schemas, plain SQL over an ORM, price as integer rupees, filters in the URL, TanStack Query for server state, image URLs instead of uploads, no auth (by brief), cascade delete.
 4. **Trade-offs given the time limit**, including: no frontend tests yet, no deployment.
 5. **Security**: what's done (parameterised SQL, validation with `.strict()`, helmet, rate limits, admin key on writes and personal data, error mapping, no bodies in logs, `npm audit`) and what isn't (real login and roles, HTTPS, audit log, deployment hardening).
-6. **What I'd do next**: real login + roles for the sales team, image uploads to S3/Cloudinary, pagination, inquiry status (new/contacted/closed) + notes, email notification on new inquiry, soft delete, frontend tests (Testing Library + Playwright), CI pipeline, deployment.
+6. **How this scales**: web is already feature-based (`features/<name>` + generic `components/ui`); the API is layered by type, which is clear at two resources, and would move to `modules/<resource>/` (routes, queries, schemas together) as resources grow.
+7. **What I'd do next**: real login + roles for the sales team, image uploads to S3/Cloudinary, pagination, inquiry status (new/contacted/closed) + notes, email notification on new inquiry, soft delete, frontend tests (Testing Library + Playwright), CI pipeline, deployment.
 
 ## 11. AI_USAGE.md
 

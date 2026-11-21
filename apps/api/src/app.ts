@@ -8,6 +8,7 @@ import { errorHandler } from './middleware/errorHandler';
 import { createRateLimiters } from './middleware/rateLimits';
 import { requestLogger } from './middleware/requestLogger';
 import { healthRouter } from './routes/health';
+import { inquiriesRouter } from './routes/inquiries';
 import { locationsRouter } from './routes/locations';
 import { propertiesRouter } from './routes/properties';
 
@@ -33,7 +34,7 @@ export function createApp({ rateLimit = true }: AppOptions = {}) {
 
   app.use(express.json({ limit: '100kb' }));
 
-  app.use('/api', healthRouter, propertiesRouter, locationsRouter);
+  app.use('/api', healthRouter, propertiesRouter, locationsRouter, inquiriesRouter);
 
   // Unknown route: same JSON error shape as everything else.
   app.use((_req, _res, next) => next(new HttpError(404, 'Route not found')));

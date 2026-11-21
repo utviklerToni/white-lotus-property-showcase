@@ -91,6 +91,7 @@ Record the outcome under Deviations or Failures in PROGRESS.md.
 - Never commit secrets, `.env` or `node_modules`. `.env.example` only.
 - Commit and push only after my "approved" on the staged diff (Per phase step 4). Plain `git push` only.
 - Never run `git reset`, `rebase`, `commit --amend`, squash or force-push. Never rewrite history.
+- Never start, stop or kill dev servers (`npm run dev`, `tsx`, `vite`, `node`). I run them in my own terminal. Run checks (curl) against `localhost:4000`; if it isn't running, ask me to start it.
 - Paid services, API keys and cloud accounts are out of scope.
 
 ## Logging (into `docs/PROGRESS.md`, as it happens, not at the end)

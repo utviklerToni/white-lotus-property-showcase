@@ -85,3 +85,4 @@ export const idParamSchema = z.object({
     .int({ error: 'id must be a whole number' })
     .positive({ error: 'id must be positive' }),
 });
+export type IdParam = z.output<typeof idParamSchema>;

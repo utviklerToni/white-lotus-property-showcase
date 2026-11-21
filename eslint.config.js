@@ -10,6 +10,10 @@ export default tseslint.config(
   js.configs.recommended,
   tseslint.configs.recommended,
   {
+    // Allow unused args prefixed with _ (Express error handlers need all four params).
+    rules: { '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }] },
+  },
+  {
     files: ['apps/api/**/*.ts', 'packages/**/*.ts', '*.js'],
     languageOptions: { globals: globals.node },
   },

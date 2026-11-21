@@ -169,7 +169,7 @@ Seed: 6–8 properties across Bengaluru locations (Devanahalli, Whitefield, Sarj
 Rules:
 
 - **Sort is whitelisted** (map of allowed values → SQL `ORDER BY`), never interpolated. All values go through parameterised queries.
-- **Status codes**: 200 / 201 / 204, 400 with field errors, 401 missing or wrong admin key, 404 unknown id, 500 generic.
+- **Status codes**: 200 / 201 / 204, 400 with field errors, 401 missing or wrong admin key, 404 unknown id, 413 body over 100kb, 429 rate limited, 503 health check when the DB is down, 500 generic.
 - **Error shape** (one format everywhere):
   ```json
   {
@@ -386,7 +386,7 @@ then restore the code and confirm green.
 
 1. Remove the `price > 0` check from the Zod schema → negative-price test must fail.
 2. Remove `sort` from the list query schema (so any value passes validation) → invalid-sort test must fail.
-3. Skip the property-exists check on inquiry POST → missing-property test must return 500 or 201, so the 404 test fails.
+3. Skip the property-exists check on inquiry POST **and** remove the `23503` → 404 mapping → the missing-property test must fail (it gets 500). Both are needed: with only the check skipped, the FK error is still mapped to 404, so no test can fail.
 4. Remove the required check on `name` → missing-name test must fail.
 5. Remove `requireAdmin` from the DELETE route → the no-key DELETE test must fail.
    If a planted bug does not make a test fail, the test is too weak: fix the test.

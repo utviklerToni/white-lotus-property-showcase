@@ -8,3 +8,5 @@ docs/reference
 .claude
 # Assignment text is kept verbatim.
 docs/BRIEF.md
+# Design brief and mocks: CSS values are copied from them as written.
+docs/design

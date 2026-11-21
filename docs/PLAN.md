@@ -27,9 +27,9 @@ Use current stable versions of everything. Tailwind v4 has **no `tailwind.config
 **Dependency allowlist.** Anything not listed here needs approval first.
 
 - api: `express`, `pg`, `zod`, `cors`, `helmet`, `express-rate-limit`, `tsx`
-- web: `react`, `react-dom`, `react-router`, `@tanstack/react-query`, `react-hook-form`, `@hookform/resolvers`, `lucide-react`, `sonner` (toasts), `tailwindcss`, `@tailwindcss/vite`
+- web: `react`, `react-dom`, `react-router` (pinned `^7`; import from `react-router`, not `react-router-dom`), `@tanstack/react-query`, `react-hook-form`, `@hookform/resolvers`, `lucide-react`, `sonner` (toasts), `tailwindcss`, `@tailwindcss/vite`, `clsx` + `tailwind-merge` (used only through the one `cn()` helper in `src/lib/cn.ts`)
 - shared: `zod`
-- dev: `typescript`, `vitest`, `supertest`, `concurrently`, `@types/*`, `eslint`, `@eslint/js`, `typescript-eslint`, `eslint-plugin-react-hooks`, `globals`, `prettier`, `eslint-config-prettier`
+- dev: `typescript`, `vitest`, `supertest`, `concurrently`, `vite`, `@vitejs/plugin-react`, `@types/*`, `eslint`, `@eslint/js`, `typescript-eslint`, `eslint-plugin-react-hooks`, `globals`, `prettier`, `eslint-config-prettier`
 
 **Shared package.** `packages/shared` is consumed as TypeScript source with no build step: its `package.json` has `"exports": { ".": "./src/index.ts" }`. Vite and `tsx` both read TS directly.
 
@@ -77,7 +77,8 @@ white-lotus/
 │   ├── BRIEF.md              # assignment text, verbatim
 │   ├── PLAN.md               # this file
 │   ├── PROGRESS.md           # handoff log (see CLAUDE.md)
-│   └── reference/            # screenshots of whitelotusgroup.in
+│   ├── design/               # DESIGN.md + listing/detail mocks: the UI source
+│   └── reference/            # screenshots of whitelotusgroup.in (palette context only)
 ├── docker/
 │   └── init-test-db.sql      # creates the white_lotus_test database
 ├── docker-compose.yml
@@ -214,19 +215,21 @@ The form shows errors inline under each field, and the submit button is disabled
 
 ### Public
 
+Visual design for every page: **`docs/design/DESIGN.md`** and its mocks. This section lists what each page does.
+
 **`/` — Properties**
 
-- Navy header (gold logo mark, champagne links). Short serif hero line.
-- Filter bar: location (dropdown from `/api/locations`), min bedrooms (Any / 3+ / 4+ / 5+), status, sort.
+- Header and footer per DESIGN.md (text wordmark, inline links on all sizes, no menu button).
+- Listings intro, then a filter bar: location (dropdown from `/api/locations`), min bedrooms (Any / 3+ / 4+ / 5+), status, sort. Every filter has a visible label.
 - **Filters stored in the URL query string**, so results can be shared and survive refresh.
-- Responsive grid: 1 col mobile, 2 tablet, 3 desktop.
-- Card: image, status badge, serif name, location, `₹6.5 Cr`, `4 BHK · 5,200 sq ft`, short description.
-- States: skeleton cards while loading; empty state ("No residences match these filters" + Clear filters); error state with Retry.
+- Responsive grid: 1 col mobile, 2 tablet, 3 desktop. Dimmed (`opacity-60`, `aria-busy`) while refetching.
+- Card: image, status badge, `No. 04` (zero-padded id), location, name, beds, size, `₹6.5 Cr`. Whole card is one link.
+- States: skeleton cards while loading; empty state ("No residences match these filters" + Clear filters); error state with Try again.
 
 **`/properties/:id` — Detail**
 
-- Large image, name, facts row in their style: `4 BHK | ₹8.5 Cr | Devanahalli`, size, status, full details.
-- Inquiry form beside it (desktop) or below it (mobile).
+- Full-bleed hero with status, `No. · location`, name and a facts list (price, bedrooms, size, location); overview, specs, details.
+- Inquiry form in a navy band beside the content (desktop, sticky) or below it (mobile).
 - Success message after submit, form resets. Server errors show without losing what the user typed.
 - 404 state for an unknown id.
 
@@ -242,92 +245,36 @@ On first visit to any admin page, a small form asks for the admin key. It's kept
 
 Toasts for create / update / delete success and failure.
 
-### Theme (from whitelotusgroup.in), Tailwind v4 in `apps/web/src/index.css`
+### Theme, Tailwind v4 in `apps/web/src/index.css`
+
+Palette from whitelotusgroup.in (navy, champagne, gold); everything else is our own. Full token list and notes: DESIGN.md §1.
 
 ```css
 @import 'tailwindcss';
 
 @theme {
   --color-navy: #282d3c;
-  --color-navy-deep: #161926;
   --color-champagne: #fae1c8;
   --color-gold: #b98a39;
-  --color-gold-dark: #aa7720;
+  --color-gold-text: #8a6418;
   --color-slate: #454b4f;
-  --font-serif: 'DM Serif Text', serif;
-  --font-sans: 'Open Sans', sans-serif;
+  --color-danger: #9b2c2c;
+  --color-stone: #faf6f0;
+  --color-sand: #d9cfc2;
+  --color-on-navy: #e8dccb;
+  --color-on-navy-accent: #e8c99a;
+  --font-serif: 'Cormorant Garamond', serif;
+  --font-sans: 'Jost', sans-serif;
 }
 ```
 
-This gives classes like `bg-navy`, `text-champagne`, `font-serif`. Fonts load from Google Fonts in `index.html`.
-Pill buttons (`rounded-full`, navy fill, champagne text). Gold only for accents. Lots of white space.
+This gives classes like `bg-navy`, `text-gold-text`, `font-serif`. Fonts load from Google Fonts in `index.html`: Cormorant Garamond 400/500 and Jost 300/400/500, with `preconnect` and `display=swap`.
 
 ---
 
-## 6b. Design direction (match their brand, then improve on it)
+## 6b. Design direction
 
-**Reference screenshots of whitelotusgroup.in are in `docs/reference/`. Look at them before building any UI.**
-
-### Reference: whitelotusgroup.in (scanned 21 Nov 2026)
-
-- Quiet, spiritual luxury. Copy is poetic ("Bengaluru's soul has found a sanctuary",
-  "Crafting Personal Sanctuaries Since 2014"). Headings read like sentences, not labels.
-- Slim dark-navy top bar (#282D3C), gold "W" logo mark (#B98A39), champagne links (#FAE1C8).
-- Full-width photo hero fading to a dark gradient at the bottom, with one facts row:
-  `4 BHK Luxury Terraced Homes | ₹8.5 Cr. Onwards | IVC Road, Devanahalli`.
-- DM Serif Text for display (often italic), Open Sans for UI and body.
-- Small pill buttons: navy fill, champagne text, rounded-full. Over photos they use an
-  **outline pill** instead: transparent fill, thin champagne border, champagne text.
-- Status labels on projects: Completed / Under Construction.
-- **Champagne (#FAE1C8) is also a section background**: the Tenets panel, the quote banner,
-  the description block on project pages and the whole footer. Navy or gold text sits on it.
-- Project pages have a **specs row with thin line icons** (e.g. "3 BHK",
-  "In the heart of Defence Colony").
-- Lots of white space, almost no colour beyond navy, gold and champagne.
-
-### Keep (so it reads as their brand)
-
-- Exact palette and fonts from the theme tokens above.
-- Facts-row pattern with `|` separators on cards and the detail hero.
-- Prices as ₹ X.X Cr, never raw numbers.
-- Pill buttons, gold used sparingly, a poetic serif tagline on the listings hero.
-
-### Improve (where we surpass their site)
-
-- **Opportunities vs the reference site:** image-heavy sections can show blank space while
-  images load, price formats vary between banners, and the menu is collapsed even on desktop.
-  We address all three: a skeleton or blur placeholder for every image, one formatted price source,
-  and visible desktop nav.
-- **Cards:** 4:3 image, a navy gradient on the bottom third, the status badge top-left in a
-  champagne pill, and the name in DM Serif.
-- **Detail page:** full-bleed hero image with gradient and facts row (like their homepage),
-  then a two-column layout: content left, inquiry card right (stacks on mobile).
-- **Typography scale:** display 48/56 serif, h2 32 serif, body 16 sans with 1.7 line-height,
-  small caps with letter-spacing (`tracking-[0.2em] uppercase text-xs`) for labels like
-  LOCATION, BEDROOMS.
-- **Motion:** none beyond simple 200 ms colour transitions on buttons and inputs. No entrance
-  animations (out of scope).
-- **Forms:** underline-style inputs on the public inquiry form, standard bordered inputs in
-  admin. Gold focus ring.
-- **Empty and loading states styled in-brand:** a serif line ("No sanctuaries match these filters
-  yet"), never a bare "No data".
-- **Champagne sections:** use champagne as a background band for the listings hero tagline,
-  the detail-page description block and the footer, with navy text on it.
-- **Specs row on the detail page:** thin line icons (lucide-react, stroke 1.25, gold) next to
-  bedrooms, size, location and status.
-- **Buttons:** filled navy pill on light backgrounds, outline champagne pill over photos.
-- **Accessibility they lack:** visible focus states, alt text, 4.5:1 contrast (champagne text
-  only on navy; never champagne text on white), and keyboard-usable filters and modals.
-- **Admin:** clean and dense, not decorative. White background, navy header, gold only for the
-  active nav item.
-
-### Don't
-
-- No bright colours, gradients beyond navy fades, glassmorphism, or emoji.
-- No stock "SaaS dashboard" look on public pages.
-- No `dangerouslySetInnerHTML` anywhere. Inquiry messages render as plain text.
-- Don't copy their logo or copy text verbatim. Use a simple "WL" serif mark and our own
-  lines in the same voice.
+Replaced (22 Nov) by **`docs/design/DESIGN.md`** and the mocks `docs/design/listing-mobile.html` and `docs/design/detail-mobile.html`. We keep only White Lotus's palette; layout, typography and components are our own. Copy CSS values from the mocks; where the brief and a mock disagree, ask. `docs/reference/` screenshots are palette context only.
 
 ---
 
@@ -427,4 +374,4 @@ Then be honest and specific: what Claude Code generated, what you changed and wh
 
 ## 12. Out of scope (say so in README)
 
-Real login / user accounts / roles, image upload, pagination, multiple images per property, deployment, CI, frontend tests, animations, i18n.
+Real login / user accounts / roles, image upload, pagination, multiple images per property, deployment, CI, frontend tests, entrance animations, i18n.

@@ -1,0 +1,22 @@
+import { createBrowserRouter } from 'react-router';
+import { Layout } from './components/Layout';
+import { PropertiesPage } from './pages/PropertiesPage';
+import { RouteError } from './pages/RouteError';
+
+export const router = createBrowserRouter([
+  {
+    element: <Layout />,
+    // Last resort if the layout itself fails to render (no header then).
+    errorElement: <RouteError />,
+    children: [
+      {
+        // Pathless route: a page error renders RouteError inside the layout, keeping the header.
+        errorElement: <RouteError />,
+        children: [
+          { index: true, element: <PropertiesPage /> },
+          { path: '*', element: <RouteError /> },
+        ],
+      },
+    ],
+  },
+]);

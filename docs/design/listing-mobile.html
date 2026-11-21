@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Listings, mobile reference mock</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: #E9E4DC; display: flex; justify-content: center; padding: 24px 0; }
+  .page { width: 480px; background: #FAF6F0; font-family: 'Jost', sans-serif; color: #282D3C; }
+  .cap { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; }
+  .serif { font-family: 'Cormorant Garamond', serif; color: #282D3C; }
+  .muted { color: #454B4F; }
+  .gold-text { color: #8A6418; }
+  h1, h3, p { margin: 0; }
+  .field-label { display: block; margin-bottom: 8px; font-size: 10px; }
+  .select { position: relative; }
+  .select select { appearance: none; width: 100%; box-sizing: border-box; border: 0; background: #FFFFFF; color: #282D3C;
+    font: 300 14px 'Jost', sans-serif; padding: 12px 36px 12px 12px; min-height: 44px; }
+  .select svg { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); pointer-events: none; }
+  select:focus-visible, a:focus-visible { outline: 2px solid #B98A39; outline-offset: 2px; }
+  .hairline { border-top: 0.5px solid rgba(40,45,60,.25); }
+  .photo { aspect-ratio: 4/3; background: #D9CFC2; position: relative; }
+  .badge { position: absolute; top: 14px; left: 14px; padding: 6px 10px; font-size: 10px; }
+  .link { color: #282D3C; text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header style="display:flex;justify-content:space-between;align-items:center;padding:18px 24px;border-bottom:0.5px solid rgba(40,45,60,.2)">
+    <span class="cap" style="font-weight:500">White Lotus</span>
+    <button aria-label="Open menu" style="all:unset;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:flex-end;cursor:pointer">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#282D3C" stroke-width="1.5" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </header>
+
+  <section style="padding:40px 24px 28px">
+    <p class="cap gold-text" style="margin-bottom:14px">Residences · Bengaluru</p>
+    <h1 class="serif" style="font-size:40px;line-height:1.05;font-weight:500;margin-bottom:16px">Homes composed<br>with quiet intent.</h1>
+    <p class="muted" style="font-size:14px;line-height:1.7;font-weight:300">Eight residences across the city, each designed around light, stillness and craft.</p>
+  </section>
+
+  <form style="padding:0 24px;display:grid;grid-template-columns:1fr 1fr;gap:12px" aria-label="Filter residences">
+    <label><span class="cap muted field-label">Location</span><span class="select"><select><option>Any</option></select><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#282D3C" stroke-width="1.5" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></label>
+    <label><span class="cap muted field-label">Bedrooms</span><span class="select"><select><option>4+</option></select><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#282D3C" stroke-width="1.5" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></label>
+    <label><span class="cap muted field-label">Status</span><span class="select"><select><option>Any</option></select><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#282D3C" stroke-width="1.5" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></label>
+    <label><span class="cap muted field-label">Sort</span><span class="select"><select><option>Newest</option></select><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#282D3C" stroke-width="1.5" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></label>
+  </form>
+  <p style="margin:16px 24px 0;font-size:12px;display:flex;justify-content:space-between">
+    <span class="muted">8 residences</span>
+    <a href="#" class="link" style="text-decoration-color:#B98A39">Clear filters</a>
+  </p>
+
+  <ul style="list-style:none;margin:0;padding:0">
+    <li style="padding:28px 24px 8px">
+      <a href="#" style="color:inherit;text-decoration:none;display:block">
+        <div class="photo"><span class="cap badge" style="background:#FAF6F0;color:#282D3C">Available</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:16px">
+          <span class="cap gold-text" style="font-size:10px">No. 04</span>
+          <span class="cap muted" style="font-size:10px">Indiranagar</span>
+        </div>
+        <h3 class="serif" style="font-size:28px;font-weight:500;margin:6px 0 12px">Indigo Terrace</h3>
+        <div class="hairline" style="padding-top:12px;display:flex;justify-content:space-between;align-items:center">
+          <span style="display:flex;gap:16px;font-size:13px;font-weight:300" class="muted">
+            <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#B98A39" stroke-width="1.25" aria-hidden="true" style="vertical-align:-2px"><path d="M3 18V8M3 14h18v4M21 18v-6a3 3 0 0 0-3-3h-7v5"/></svg> 4 beds</span>
+            <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#B98A39" stroke-width="1.25" aria-hidden="true" style="vertical-align:-2px"><path d="M4 20L20 4M8 20l-4-4M12 16l-2-2M16 12l-2-2M20 8l-4-4"/></svg> 4,800 sq ft</span>
+          </span>
+          <span style="font-size:17px;font-variant-numeric:tabular-nums">₹12.5 Cr</span>
+        </div>
+        <p style="margin-top:14px;font-size:13px"><span class="link">View residence</span> →</p>
+      </a>
+    </li>
+    <li style="padding:28px 24px 8px">
+      <a href="#" style="color:inherit;text-decoration:none;display:block">
+        <div class="photo" style="background:#C9C3B8"><span class="cap badge" style="background:#282D3C;color:#FAE1C8">Under construction</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:16px">
+          <span class="cap gold-text" style="font-size:10px">No. 03</span>
+          <span class="cap muted" style="font-size:10px">Sarjapur</span>
+        </div>
+        <h3 class="serif" style="font-size:28px;font-weight:500;margin:6px 0 12px">The Cedar Residence</h3>
+        <div class="hairline" style="padding-top:12px;display:flex;justify-content:space-between;align-items:center">
+          <span style="display:flex;gap:16px;font-size:13px;font-weight:300" class="muted">
+            <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#B98A39" stroke-width="1.25" aria-hidden="true" style="vertical-align:-2px"><path d="M3 18V8M3 14h18v4M21 18v-6a3 3 0 0 0-3-3h-7v5"/></svg> 5 beds</span>
+            <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#B98A39" stroke-width="1.25" aria-hidden="true" style="vertical-align:-2px"><path d="M4 20L20 4M8 20l-4-4M12 16l-2-2M16 12l-2-2M20 8l-4-4"/></svg> 5,600 sq ft</span>
+          </span>
+          <span style="font-size:17px;font-variant-numeric:tabular-nums">₹8.9 Cr</span>
+        </div>
+        <p style="margin-top:14px;font-size:13px"><span class="link">View residence</span> →</p>
+      </a>
+    </li>
+  </ul>
+
+  <section style="margin:32px 24px 0;background:#FAE1C8;padding:24px">
+    <p class="serif" style="font-size:24px;font-weight:500;margin-bottom:6px">Considering a residence?</p>
+    <p class="muted" style="font-size:13px;line-height:1.6;margin-bottom:16px;font-weight:300">Our team arranges private viewings by appointment.</p>
+    <a href="#" class="cap" style="display:inline-block;background:#282D3C;color:#FAF6F0;padding:14px 22px;text-decoration:none">Enquire</a>
+  </section>
+
+  <footer style="padding:28px 24px;margin-top:32px;border-top:0.5px solid rgba(40,45,60,.2);display:flex;justify-content:space-between">
+    <span class="cap muted" style="font-size:10px">White Lotus · Bengaluru</span>
+    <span class="cap gold-text" style="font-size:10px">Since 2014</span>
+  </footer>
+
+</div>
+</body>
+</html>

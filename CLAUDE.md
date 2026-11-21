@@ -9,7 +9,8 @@ Property Showcase & Inquiry Manager (take-home). React + Vite + TS + Tailwind, E
 | `docs/BRIEF.md`    | Assignment text. **Source of truth.** Wins over everything else.                   |
 | `docs/PLAN.md`     | What to build: stack, schema, API, pages, design, commit order, tests.             |
 | `docs/PROGRESS.md` | Where we are: state, decisions, failures, deviations, AI usage notes, session log. |
-| `docs/reference/`  | Screenshots of the client site. View them before any UI work.                      |
+| `docs/design/`     | `DESIGN.md` + mocks: the visual design. Read before any UI work; copy CSS values.  |
+| `docs/reference/`  | Screenshots of the client site. Palette context only; don't copy their layout.     |
 
 If PLAN conflicts with BRIEF, stop and ask. Never resolve it silently.
 
@@ -82,7 +83,7 @@ Record the outcome under Deviations or Failures in PROGRESS.md.
 - Tests run against `white_lotus_test` only, never the dev database.
 - Never commit while a planted bug is in the code. All tests green before every commit.
 - TypeScript strict. No `any` and no `eslint-disable` without a same-line comment explaining why.
-- Build only what the brief asks for plus what PLAN.md lists. No CI, no deployment, no frontend tests, no animations, no real login.
+- Build only what the brief asks for plus what PLAN.md lists. No CI, no deployment, no frontend tests, no real login. No entrance animations; only the motion in DESIGN.md §5.
 - Validation lives in `packages/shared` (Zod) and is used by both web and api. DB CHECK constraints stay as the last line of defence.
 - One error response shape everywhere: `{ error, fields? }`. No stack traces in responses.
 - No `window.alert` / `window.confirm` / `window.prompt`. Use React modals and toasts.
@@ -93,6 +94,20 @@ Record the outcome under Deviations or Failures in PROGRESS.md.
 - Never run `git reset`, `rebase`, `commit --amend`, squash or force-push. Never rewrite history.
 - Never start, stop or kill dev servers (`npm run dev`, `tsx`, `vite`, `node`). I run them in my own terminal. Run checks (curl) against `localhost:4000`; if it isn't running, ask me to start it.
 - Paid services, API keys and cloud accounts are out of scope.
+
+### Frontend rules
+
+- No `memo` / `useMemo` / `useCallback` by default; only with a measured reason, stated in a comment.
+- Images: sized Unsplash URLs with `srcset` / `sizes`, a fixed aspect ratio (no layout shift), `decoding="async"`; `loading="lazy"` on cards, `fetchpriority="high"` on the detail hero.
+- Admin routes are lazy-loaded with `React.lazy` and a `Suspense` fallback.
+- TanStack Query: a sensible `staleTime`; `placeholderData: keepPreviousData` when filters change.
+- Fonts: `preconnect`, `display=swap`, only the weights used.
+- Stable keys (id, never index). Derive values during render instead of copying them into state.
+- No `useEffect` for data fetching or for syncing derived state.
+- Import everything from `react-router` (not `react-router-dom`).
+- A route-level error boundary with a branded fallback page.
+- A per-page `<title>` using React 19's built-in metadata (no react-helmet).
+- Phase 7 includes a Lighthouse run on mobile: Performance ≥ 90 and Accessibility ≥ 95, scores recorded in PROGRESS.md.
 
 ## Logging (into `docs/PROGRESS.md`, as it happens, not at the end)
 

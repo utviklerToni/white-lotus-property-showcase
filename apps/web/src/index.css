@@ -1,0 +1,84 @@
+@import 'tailwindcss';
+
+/* Tokens from docs/design/DESIGN.md §1. */
+@theme {
+  /* Drop Tailwind's default colours: only the palette below can be used. */
+  --color-*: initial;
+  --color-white: #ffffff;
+
+  /* Palette (from White Lotus) */
+  --color-navy: #282d3c; /* primary text, primary buttons, inquiry band */
+  --color-champagne: #fae1c8; /* tinted panels, button on navy */
+  --color-gold: #b98a39; /* icons, hairline frames, focus ring on navy, underlines. Not small text */
+  --color-gold-text: #8a6418; /* gold for small text on light backgrounds */
+  --color-slate: #454b4f; /* secondary text */
+  --color-danger: #9b2c2c; /* inline form errors (admin), 4.5:1+ on white and stone */
+
+  /* Our neutrals */
+  --color-stone: #faf6f0; /* page background */
+  --color-sand: #d9cfc2; /* image placeholder, skeleton */
+  --color-on-navy: #e8dccb; /* labels on navy */
+  --color-on-navy-accent: #e8c99a; /* small accent text on navy */
+
+  --font-serif: 'Cormorant Garamond', serif;
+  --font-sans: 'Jost', sans-serif;
+}
+
+/* Small-caps label: pair with a size (text-[10px] / text-[11px]). Short labels only. */
+@utility caps {
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+}
+
+/* Page container: max 1200px, 24px side padding on mobile, 48px from md. */
+@utility page {
+  margin-inline: auto;
+  max-width: 1200px;
+  padding-inline: 24px;
+  @variant md {
+    padding-inline: 48px;
+  }
+}
+
+/* Primary button (navy fill), used on <button> and <Link>. Square, no pill. */
+@utility btn-primary {
+  @apply caps inline-flex min-h-11 items-center justify-center bg-navy px-[22px] py-3.5 text-[11px] font-medium text-stone transition-colors duration-200 hover:bg-slate;
+}
+
+/* Text link: 1px underline with an offset. Pair with a decoration colour if needed. */
+@utility text-link {
+  @apply underline decoration-1 underline-offset-4 transition-colors duration-200;
+}
+
+@layer base {
+  html {
+    background-color: var(--color-stone);
+    color: var(--color-navy);
+  }
+
+  body {
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* 2px ring with 2px offset on every interactive element (DESIGN.md §6). Bright gold is
+     only 2.89:1 on stone, so light backgrounds get gold-text (4.98:1) and navy gets gold (4.41:1). */
+  :focus-visible {
+    outline: 2px solid var(--color-gold-text);
+    outline-offset: 2px;
+  }
+
+  .bg-navy :focus-visible {
+    outline-color: var(--color-gold);
+  }
+}
+
+/* DESIGN.md §5: all motion off for people who ask for less. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

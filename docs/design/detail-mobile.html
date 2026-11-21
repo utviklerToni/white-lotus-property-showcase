@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Property detail, mobile reference mock</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: #E9E4DC; display: flex; justify-content: center; padding: 24px 0; }
+  .page { width: 480px; background: #FAF6F0; font-family: 'Jost', sans-serif; color: #282D3C; }
+  h1, h2, p, dl, dt, dd { margin: 0; }
+  .cap { font-size: 10px; letter-spacing: .22em; text-transform: uppercase; }
+  .serif { font-family: 'Cormorant Garamond', serif; }
+  .muted { color: #454B4F; }
+  .gold-text { color: #8A6418; }
+  .row { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 0.5px solid rgba(40,45,60,.25); }
+  .field { display: block; }
+  .field span { display: block; color: #E8DCCB; margin-bottom: 6px; }
+  .field input, .field textarea { display: block; width: 100%; box-sizing: border-box; border: 0; background: #FAF6F0; color: #282D3C;
+    font: 300 14px 'Jost', sans-serif; padding: 12px; min-height: 44px; resize: vertical; }
+  input:focus-visible, textarea:focus-visible, a:focus-visible, button:focus-visible { outline: 2px solid #B98A39; outline-offset: 2px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header style="display:flex;justify-content:space-between;align-items:center;padding:18px 24px;border-bottom:0.5px solid rgba(40,45,60,.2)">
+    <span class="cap" style="font-weight:500;font-size:11px">White Lotus</span>
+    <a href="#" class="cap muted" style="font-size:11px;text-decoration:none;min-height:44px;display:flex;align-items:center">← Residences</a>
+  </header>
+
+  <!-- Hero: in the real build this is a photo with a bottom scrim of at least rgba(22,25,38,.55) -->
+  <section style="background:#3B3A36;min-height:520px;display:flex;flex-direction:column;justify-content:space-between;padding:28px 24px 24px">
+    <span class="cap" style="align-self:flex-start;background:#FAF6F0;padding:6px 10px;color:#282D3C">Available</span>
+    <div style="text-align:center">
+      <p class="cap" style="color:#FAE1C8;margin-bottom:14px">No. 04 · Indiranagar</p>
+      <h1 class="serif" style="font-size:48px;line-height:1;font-weight:500;color:#FFFFFF">Indigo<br>Terrace</h1>
+    </div>
+    <dl style="display:grid;grid-template-columns:1fr 1fr;gap:16px 20px;border-top:0.5px solid rgba(255,255,255,.35);padding-top:16px">
+      <div><dt class="cap" style="color:#E8DCCB;margin-bottom:4px">Price</dt><dd style="color:#FFFFFF;font-size:17px;font-variant-numeric:tabular-nums">₹12.5 Cr</dd></div>
+      <div><dt class="cap" style="color:#E8DCCB;margin-bottom:4px">Bedrooms</dt><dd style="color:#FFFFFF;font-size:17px">4</dd></div>
+      <div><dt class="cap" style="color:#E8DCCB;margin-bottom:4px">Size</dt><dd style="color:#FFFFFF;font-size:17px">4,800 sq ft</dd></div>
+      <div><dt class="cap" style="color:#E8DCCB;margin-bottom:4px">Location</dt><dd style="color:#FFFFFF;font-size:17px">Indiranagar</dd></div>
+    </dl>
+  </section>
+
+  <section style="padding:48px 24px 40px">
+    <p class="cap gold-text" style="margin-bottom:16px">Overview</p>
+    <p style="font-size:22px;line-height:1.45;font-weight:300;text-indent:2em">A four-bedroom terrace residence set back from a quiet Indiranagar lane, where deep balconies, oak floors and filtered light shape every room.</p>
+  </section>
+
+  <dl style="margin:0 24px;border-top:0.5px solid rgba(40,45,60,.25)">
+    <div class="row"><dt class="cap muted">Status</dt><dd style="font-size:14px">Available</dd></div>
+    <div class="row"><dt class="cap muted">Built-up area</dt><dd style="font-size:14px">4,800 sq ft</dd></div>
+    <div class="row"><dt class="cap muted">Bedrooms</dt><dd style="font-size:14px">4</dd></div>
+    <div class="row"><dt class="cap muted">Neighbourhood</dt><dd style="font-size:14px">Indiranagar, Bengaluru</dd></div>
+  </dl>
+
+  <section style="padding:40px 24px">
+    <p class="muted" style="font-size:14px;line-height:1.8;font-weight:300">The home opens onto a double-height living room with a stone hearth. A private terrace on the upper floor looks out over the neighbourhood's canopy of rain trees. Finishes include Italian marble in the bathrooms and solid oak joinery throughout.</p>
+  </section>
+
+  <section style="background:#282D3C;padding:40px 24px" aria-labelledby="enquire-title">
+    <div style="border:0.5px solid #B98A39;padding:28px 22px">
+      <p class="cap" style="color:#E8C99A;margin-bottom:12px">Private viewing</p>
+      <h2 id="enquire-title" class="serif" style="font-size:30px;line-height:1.1;font-weight:500;color:#FAF6F0;margin-bottom:24px">Arrange a visit to Indigo Terrace</h2>
+      <form style="display:grid;gap:18px" novalidate>
+        <label class="field"><span class="cap">Name</span><input name="name" autocomplete="name"></label>
+        <label class="field"><span class="cap">Email</span><input name="email" type="email" autocomplete="email"></label>
+        <label class="field"><span class="cap">Phone</span><input name="phone" type="tel" autocomplete="tel"></label>
+        <label class="field"><span class="cap">Message</span><textarea name="message" rows="3"></textarea></label>
+        <button type="submit" class="cap" style="margin-top:10px;border:0;background:#FAE1C8;color:#282D3C;padding:15px 22px;font-family:'Jost',sans-serif;font-size:11px;font-weight:500;cursor:pointer;min-height:44px">Send enquiry</button>
+        <p style="font-size:12px;color:#E8DCCB;text-align:center;font-weight:300">Our team replies within one working day.</p>
+      </form>
+    </div>
+  </section>
+
+  <footer style="padding:28px 24px;display:flex;justify-content:space-between">
+    <span class="cap muted">White Lotus · Bengaluru</span>
+    <span class="cap gold-text">Since 2014</span>
+  </footer>
+
+</div>
+</body>
+</html>

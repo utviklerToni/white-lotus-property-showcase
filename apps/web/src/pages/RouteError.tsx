@@ -1,10 +1,10 @@
 import { Link, isRouteErrorResponse, useRouteError } from 'react-router';
 
-// Branded fallback for render errors and unknown URLs. Used as the route errorElement
-// and as the `*` route (there useRouteError() is undefined, which means "not found").
+// Branded fallback, used as the route errorElement. Unknown URLs arrive as a 404 thrown by
+// the `*` route's loader; anything else (a render error) is "Something went wrong".
 export function RouteError() {
   const error = useRouteError();
-  const notFound = error === undefined || (isRouteErrorResponse(error) && error.status === 404);
+  const notFound = isRouteErrorResponse(error) && error.status === 404;
   const heading = notFound ? 'This page could not be found' : 'Something went wrong';
 
   return (

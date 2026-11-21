@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router';
+import { createBrowserRouter, data } from 'react-router';
 import { Layout } from './components/Layout';
 import { PropertiesPage } from './pages/PropertiesPage';
 import { RouteError } from './pages/RouteError';
@@ -14,7 +14,13 @@ export const router = createBrowserRouter([
         errorElement: <RouteError />,
         children: [
           { index: true, element: <PropertiesPage /> },
-          { path: '*', element: <RouteError /> },
+          // Unknown URL: throw a real 404, so RouteError (the errorElement above) shows not-found.
+          {
+            path: '*',
+            loader: () => {
+              throw data(null, { status: 404 });
+            },
+          },
         ],
       },
     ],

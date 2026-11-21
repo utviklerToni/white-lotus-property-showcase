@@ -14,7 +14,7 @@
     "db:migrate": "npm run db:migrate --workspace=apps/api",
     "db:migrate:test": "npm run db:migrate:test --workspace=apps/api",
     "db:seed": "npm run db:seed --workspace=apps/api",
-    "test": "vitest run --passWithNoTests",
+    "test": "vitest run",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -24,11 +24,13 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/node": "^22.20.5",
+    "@types/supertest": "^7.2.1",
     "eslint": "^10.15.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-react-hooks": "^7.1.1",
     "globals": "^17.14.0",
     "prettier": "^3.10.1",
+    "supertest": "^7.3.2",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.73.0",
     "vitest": "^5.1.1"

@@ -42,7 +42,14 @@ The whole build runs on Opus 5.5, high effort. Keep token use sensible: read onl
 1. **Phase start:** name the phase, list the files you'll create or change and why. Wait for OK.
 2. **Build** only that phase.
 3. **Verify:** tell me exactly how to check it (commands, URLs, what I should see). Stop.
-4. **Commit** after I confirm: update PROGRESS.md, then commit code + PROGRESS.md together with the message from PLAN.md section 8.
+4. **Commit** after I confirm the phase works. For each commit:
+   1. Update PROGRESS.md first (on the last commit of a phase).
+   2. Stage ONLY that commit's files, by name. Never `git add .` or `git add -A`.
+   3. Show me `git diff --staged --stat` and the planned message (from PLAN.md section 8, or approved by me). Then STOP.
+   4. I review with `git diff --staged` and reply "approved".
+   5. Only after "approved": commit, push, then show `git log --oneline -3` and `git status`.
+   6. If I reply anything else, change nothing in git and wait.
+   7. Never run `git reset`, `rebase`, `commit --amend` or force-push. If something looks wrong, stop and tell me.
 5. **Phase-end self-check**, reported as a checklist:
    - `npm run check` passes (lint errors, typecheck, tests) and `npm run format` was run
    - `git log --oneline -5` shows the planned commit(s) with the planned messages
@@ -59,7 +66,7 @@ The whole build runs on Opus 5.5, high effort. Keep token use sensible: read onl
 - add a dependency not in the PLAN section 1 allowlist, or any tool or service not in the plan
 - retry the same failing fix a third time
 - commit with a message not from PLAN.md or not approved by me
-- touch git history (amend after push, rebase, squash, force-push) or run `git push`
+- touch git history (reset, amend, rebase, squash, force-push), or commit / push without my "approved"
 - guess where the plan or brief is unclear
 
 Record the outcome under Deviations or Failures in PROGRESS.md.
@@ -82,7 +89,8 @@ Record the outcome under Deviations or Failures in PROGRESS.md.
 - Every list view has loading, empty and error states.
 - Don't copy the client's logo or copy text verbatim.
 - Never commit secrets, `.env` or `node_modules`. `.env.example` only.
-- Never run `git push`. Never squash or rewrite history.
+- Commit and push only after my "approved" on the staged diff (Per phase step 4). Plain `git push` only.
+- Never run `git reset`, `rebase`, `commit --amend`, squash or force-push. Never rewrite history.
 - Paid services, API keys and cloud accounts are out of scope.
 
 ## Logging (into `docs/PROGRESS.md`, as it happens, not at the end)

@@ -92,7 +92,7 @@ white-lotus/
 └── package.json              # workspaces + root scripts
 ```
 
-Root scripts: `npm run db:migrate`, `npm run db:seed`, `npm run dev` (api + web via `concurrently`), `npm test`, `npm run lint`, `npm run format`, `npm run format:check`, `npm run typecheck`, and `npm run check` (lint + typecheck + test).
+Root scripts: `npm run db:migrate`, `npm run db:migrate:test` (same migrations against `DATABASE_URL_TEST`), `npm run db:seed`, `npm run dev` (api + web via `concurrently`), `npm test`, `npm run lint`, `npm run format`, `npm run format:check`, `npm run typecheck`, and `npm run check` (lint + typecheck + test).
 
 ### Code quality (supports "clean, readable code")
 

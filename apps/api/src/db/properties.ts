@@ -3,8 +3,7 @@
 import type { Property, PropertyData, PropertyListQuery, SortOption } from '@white-lotus/shared';
 import { pool } from './pool';
 
-// Note: pg returns created_at / updated_at as Date objects; res.json() sends them as ISO strings,
-// which is what the shared `Property` type describes.
+// created_at / updated_at arrive as ISO strings (type parser in pool.ts), matching `Property`.
 const COLUMNS =
   'id, name, location, price, size_sqft, bedrooms, description, details, image_url, status, created_at, updated_at';
 

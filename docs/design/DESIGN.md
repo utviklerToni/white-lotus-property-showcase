@@ -76,7 +76,7 @@ Small gold-text caps line ("Residences · Bengaluru"), Cormorant headline, one s
 
 ### Filter bar
 - Labels: small caps, slate, above each control.
-- Controls: **light fill (white), no border**, navy text, Jost 300 14px, padding 10–12px, navy chevron icon on the right (the chevron identifies the control).
+- Controls: **white fill with a 1px bottom border in gold-text `#8A6418`** (turns navy on hover; bright `#B98A39` fails 3:1 on stone), no other border, navy text, Jost 300 14px, padding 10–12px, gold chevron icon on the right (the chevron identifies the control). Focus ring as in §6.
 - 2-column grid on mobile, one row on desktop.
 - Below: result count (slate) left, "Clear filters" right (text link, gold underline).
 - While refetching: grid at `opacity-60` + `aria-busy="true"`.
@@ -91,7 +91,7 @@ Whole card is one link (one focusable element); no nested interactive elements.
 `No.` = the property's database id, zero-padded (`No. 04`), so the card and the detail page always match.
 
 ### Status badge
-Small caps 10px, padding 6px 10px, square. Available: stone bg / navy text. Under construction: navy bg / champagne text. Sold: slate bg / stone text.
+Small caps 10px, padding 6px 10px, square. Available: champagne bg / navy text (stays visible on bright sky photos). No borders on badges. Under construction: navy bg / champagne text. Sold: slate bg / stone text.
 
 ### Buttons and links
 - Primary: navy fill, stone text, small caps 11px, `letter-spacing .2em`, padding 12–14px 22px, square.
@@ -137,7 +137,7 @@ Only: image fade-in on load (300ms), slow zoom on card image hover (`scale-[1.03
 - Real `<label>` for every input and select; errors linked with `aria-describedby`; `aria-invalid` on failed fields.
 - Photos: `alt` = "{name}, {location}". Decorative icons `aria-hidden`.
 - Tap targets ≥ 44px. No horizontal scroll at 320px. Works at 200% zoom.
-- Borderless inputs on stone rely on fill + label + chevron; the focus ring must be clearly visible.
+- Inputs on stone rely on fill + label (filter selects also have a chevron and a bottom border); the focus ring must be clearly visible.
 - Phase 7: Lighthouse Accessibility ≥ 95 and Performance ≥ 90 on mobile, plus one keyboard-only pass.
 
 ---
@@ -145,4 +145,4 @@ Only: image fade-in on load (300ms), slow zoom on card image hover (`scale-[1.03
 ## 7. Don't
 - Don't copy White Lotus's layout, text, logo, italic serif style, pills or `|` facts rows.
 - No gradients (except the hero scrim), no shadows, no rounded corners, no emoji, no entrance animations.
-- No borders on inputs. No more colour than the palette above.
+- No borders on inputs, except the filter selects' 1px bottom border (§4). No more colour than the palette above.

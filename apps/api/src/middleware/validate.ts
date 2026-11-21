@@ -43,8 +43,13 @@ function addFieldErrors(fields: Record<string, string>, error: z.ZodError, part:
       for (const key of issue.keys) fields[key] ??= 'Unknown field';
       continue;
     }
-    // An empty path means the whole part is wrong (e.g. no JSON body): use the part name.
-    const key = issue.path.join('.') || part;
+    // An empty path means the whole part is wrong, e.g. no JSON body or an array instead of
+    // an object. Zod's own message there is not user-friendly, so give a clear one.
+    const key = issue.path.join('.');
+    if (key === '') {
+      fields[part] ??= `Request ${part} must be a JSON object`;
+      continue;
+    }
     fields[key] ??= issue.message;
   }
 }

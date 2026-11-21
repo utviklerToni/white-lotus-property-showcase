@@ -105,7 +105,8 @@ Record the outcome under Deviations or Failures in PROGRESS.md.
 Fill in as they're created in Phase 1:
 
 - `docker compose up -d` — start Postgres
-- `npm run db:migrate` / `npm run db:seed`
+- `npm run db:migrate` / `npm run db:seed` (dev DB, needs `.env` copied from `.env.example`)
+- `npm run db:migrate:test` — same migrations against `DATABASE_URL_TEST`
 - `npm run dev` — api + web
 - `npm test`
 - `npm run lint` / `npm run format` / `npm run typecheck`

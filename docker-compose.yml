@@ -1,0 +1,22 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: white_lotus
+      POSTGRES_PASSWORD: white_lotus
+      POSTGRES_DB: white_lotus
+    ports:
+      # 5433 on the host so it doesn't clash with a local Postgres on 5432.
+      - '5433:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # Runs only on first start (empty volume): creates white_lotus_test.
+      - ./docker/init-test-db.sql:/docker-entrypoint-initdb.d/init-test-db.sql:ro
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U white_lotus -d white_lotus']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pgdata:

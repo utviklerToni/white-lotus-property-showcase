@@ -1,0 +1,10 @@
+node_modules
+dist
+build
+coverage
+package-lock.json
+docs/reference
+# Local Claude Code settings (not project code).
+.claude
+# Assignment text is kept verbatim.
+docs/BRIEF.md

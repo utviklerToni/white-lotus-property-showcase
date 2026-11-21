@@ -173,8 +173,8 @@ Rules:
 - **Error shape** (one format everywhere):
   ```json
   {
-  	"error": "ValidationError",
-  	"fields": { "price": "Price must be a positive number" }
+    "error": "ValidationError",
+    "fields": { "price": "Price must be a positive number" }
   }
   ```
 - `validate(schema)` middleware runs Zod on `body` / `query` / `params`. `:id` is `z.coerce.number().int().positive()`.
@@ -248,14 +248,14 @@ Toasts for create / update / delete success and failure.
 @import 'tailwindcss';
 
 @theme {
-	--color-navy: #282d3c;
-	--color-navy-deep: #161926;
-	--color-champagne: #fae1c8;
-	--color-gold: #b98a39;
-	--color-gold-dark: #aa7720;
-	--color-slate: #454b4f;
-	--font-serif: 'DM Serif Text', serif;
-	--font-sans: 'Open Sans', sans-serif;
+  --color-navy: #282d3c;
+  --color-navy-deep: #161926;
+  --color-champagne: #fae1c8;
+  --color-gold: #b98a39;
+  --color-gold-dark: #aa7720;
+  --color-slate: #454b4f;
+  --font-serif: 'DM Serif Text', serif;
+  --font-sans: 'Open Sans', sans-serif;
 }
 ```
 

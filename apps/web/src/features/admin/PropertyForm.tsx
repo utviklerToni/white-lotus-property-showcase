@@ -255,7 +255,8 @@ export function PropertyForm({ property }: { property?: Property }) {
         <ImagePreview control={control} />
       </section>
 
-      <div className="flex flex-wrap gap-3 lg:col-start-1">
+      {/* Sticky action bar: stays at the viewport bottom on a long form, settles at the end. */}
+      <div className="sticky bottom-0 flex flex-wrap gap-3 border-t-[0.5px] border-navy/20 bg-stone py-3 lg:col-start-1">
         <button
           type="submit"
           disabled={save.isPending}

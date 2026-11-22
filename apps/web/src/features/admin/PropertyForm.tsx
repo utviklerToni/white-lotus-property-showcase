@@ -131,115 +131,131 @@ export function PropertyForm({ property }: { property?: Property }) {
 
   return (
     // noValidate: the shared Zod schema gives the messages, not the browser's bubbles.
-    <form onSubmit={submit} noValidate className="grid max-w-3xl gap-6 md:grid-cols-2">
-      <Field id={ids('name')} label="Name" error={errors.name?.message}>
-        <input {...register('name')} {...fieldProps('name')} className={INPUT} />
-      </Field>
-      <Field id={ids('location')} label="Location" error={errors.location?.message}>
-        <input {...register('location')} {...fieldProps('location')} className={INPUT} />
-      </Field>
+    // Desktop: fields left, a sticky image preview right. Mobile: fields, preview, buttons.
+    <form
+      onSubmit={submit}
+      noValidate
+      className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_26rem] lg:items-start lg:gap-12"
+    >
+      <div className="grid gap-6 md:grid-cols-2 lg:col-start-1">
+        <Field id={ids('name')} label="Name" error={errors.name?.message}>
+          <input {...register('name')} {...fieldProps('name')} className={INPUT} />
+        </Field>
+        <Field id={ids('location')} label="Location" error={errors.location?.message}>
+          <input {...register('location')} {...fieldProps('location')} className={INPUT} />
+        </Field>
 
-      <Field
-        id={ids('price')}
-        label="Price (₹)"
-        error={errors.price?.message}
-        hint={<PriceHint control={control} />}
-      >
-        <input
-          {...priceField}
-          {...fieldProps('price', true)}
-          inputMode="numeric"
-          autoComplete="off"
-          onPaste={pastePrice}
-          className={cn(INPUT, 'tabular-nums')}
-        />
-      </Field>
-      <Field id={ids('size_sqft')} label="Size (sq ft)" error={errors.size_sqft?.message}>
-        <input
-          {...register('size_sqft', { setValueAs: toNumber })}
-          {...fieldProps('size_sqft')}
-          inputMode="numeric"
-          autoComplete="off"
-          className={cn(INPUT, 'tabular-nums')}
-        />
-      </Field>
-
-      <Field id={ids('bedrooms')} label="Bedrooms" error={errors.bedrooms?.message}>
-        <input
-          {...register('bedrooms', { setValueAs: toNumber })}
-          {...fieldProps('bedrooms')}
-          inputMode="numeric"
-          autoComplete="off"
-          className={cn(INPUT, 'tabular-nums')}
-        />
-      </Field>
-      <Field id={ids('status')} label="Status" error={errors.status?.message}>
-        <div className="relative">
-          <select
-            {...register('status')}
-            {...fieldProps('status')}
-            className={cn(INPUT, 'appearance-none pr-9')}
-          >
-            {PROPERTY_STATUSES.map((status) => (
-              <option key={status} value={status}>
-                {STATUS_LABELS[status]}
-              </option>
-            ))}
-          </select>
-          <ChevronDown
-            aria-hidden
-            size={14}
-            strokeWidth={1.5}
-            className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gold"
+        <Field
+          id={ids('price')}
+          label="Price (₹)"
+          error={errors.price?.message}
+          hint={<PriceHint control={control} />}
+        >
+          <input
+            {...priceField}
+            {...fieldProps('price', true)}
+            inputMode="numeric"
+            autoComplete="off"
+            onPaste={pastePrice}
+            className={cn(INPUT, 'tabular-nums')}
           />
-        </div>
-      </Field>
+        </Field>
+        <Field id={ids('size_sqft')} label="Size (sq ft)" error={errors.size_sqft?.message}>
+          <input
+            {...register('size_sqft', { setValueAs: toNumber })}
+            {...fieldProps('size_sqft')}
+            inputMode="numeric"
+            autoComplete="off"
+            className={cn(INPUT, 'tabular-nums')}
+          />
+        </Field>
 
-      <Field
-        id={ids('image_url')}
-        label="Image URL"
-        error={errors.image_url?.message}
-        className="md:col-span-2"
+        <Field id={ids('bedrooms')} label="Bedrooms" error={errors.bedrooms?.message}>
+          <input
+            {...register('bedrooms', { setValueAs: toNumber })}
+            {...fieldProps('bedrooms')}
+            inputMode="numeric"
+            autoComplete="off"
+            className={cn(INPUT, 'tabular-nums')}
+          />
+        </Field>
+        <Field id={ids('status')} label="Status" error={errors.status?.message}>
+          <div className="relative">
+            <select
+              {...register('status')}
+              {...fieldProps('status')}
+              className={cn(INPUT, 'appearance-none pr-9')}
+            >
+              {PROPERTY_STATUSES.map((status) => (
+                <option key={status} value={status}>
+                  {STATUS_LABELS[status]}
+                </option>
+              ))}
+            </select>
+            <ChevronDown
+              aria-hidden
+              size={14}
+              strokeWidth={1.5}
+              className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gold"
+            />
+          </div>
+        </Field>
+
+        <Field
+          id={ids('image_url')}
+          label="Image URL"
+          error={errors.image_url?.message}
+          className="md:col-span-2"
+        >
+          <input
+            {...register('image_url')}
+            {...fieldProps('image_url')}
+            type="url"
+            inputMode="url"
+            autoComplete="off"
+            className={INPUT}
+          />
+        </Field>
+
+        <Field
+          id={ids('description')}
+          label="Description"
+          error={errors.description?.message}
+          className="md:col-span-2"
+        >
+          <textarea
+            {...register('description')}
+            {...fieldProps('description')}
+            rows={3}
+            className={cn(INPUT, 'resize-y')}
+          />
+        </Field>
+        <Field
+          id={ids('details')}
+          label="Details (optional)"
+          error={errors.details?.message}
+          className="md:col-span-2"
+        >
+          <textarea
+            {...register('details')}
+            {...fieldProps('details')}
+            rows={6}
+            className={cn(INPUT, 'resize-y')}
+          />
+        </Field>
+      </div>
+
+      <section
+        aria-label="Image preview"
+        className="w-full max-w-md lg:sticky lg:top-8 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:max-w-none"
       >
-        <input
-          {...register('image_url')}
-          {...fieldProps('image_url')}
-          type="url"
-          inputMode="url"
-          autoComplete="off"
-          className={INPUT}
-        />
+        <p aria-hidden className="caps mb-2 text-[10px] text-slate">
+          Image preview
+        </p>
         <ImagePreview control={control} />
-      </Field>
+      </section>
 
-      <Field
-        id={ids('description')}
-        label="Description"
-        error={errors.description?.message}
-        className="md:col-span-2"
-      >
-        <textarea
-          {...register('description')}
-          {...fieldProps('description')}
-          rows={3}
-          className={cn(INPUT, 'resize-y')}
-        />
-      </Field>
-      <Field
-        id={ids('details')}
-        label="Details (optional)"
-        error={errors.details?.message}
-        className="md:col-span-2"
-      >
-        <textarea
-          {...register('details')}
-          {...fieldProps('details')}
-          rows={6}
-          className={cn(INPUT, 'resize-y')}
-        />
-      </Field>
-
-      <div className="flex flex-wrap gap-3 md:col-span-2">
+      <div className="flex flex-wrap gap-3 lg:col-start-1">
         <button
           type="submit"
           disabled={save.isPending}
@@ -311,16 +327,16 @@ function ImagePreview({ control }: ControlProps) {
   } else if (failedUrl === url) {
     content = <span className="px-4">This image could not be loaded.</span>;
   } else {
-    const { src, srcSet } = imageSources(url, 3 / 2);
+    const { src, srcSet } = imageSources(url, 4 / 3);
     content = (
       <img
         key={url}
         src={src}
         srcSet={srcSet}
-        sizes="384px"
+        sizes="(min-width: 1024px) 416px, 448px"
         alt="Preview of the property image"
-        width={384}
-        height={256}
+        width={416}
+        height={312}
         decoding="async"
         onError={() => setFailedUrl(url)}
         className="h-full w-full object-cover"
@@ -328,7 +344,7 @@ function ImagePreview({ control }: ControlProps) {
     );
   }
   return (
-    <div className="mt-3 flex aspect-[3/2] w-full max-w-sm items-center justify-center bg-sand text-center text-[13px] text-slate">
+    <div className="flex aspect-[4/3] w-full items-center justify-center bg-sand text-center text-[13px] text-slate">
       {content}
     </div>
   );

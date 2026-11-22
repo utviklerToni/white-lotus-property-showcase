@@ -25,6 +25,13 @@ export function formatNumber(id: number): string {
   return `No. ${String(id).padStart(2, '0')}`;
 }
 
+const dateTime = new Intl.DateTimeFormat('en-IN', { dateStyle: 'medium', timeStyle: 'short' });
+
+/** "22 Nov 2026, 10:15 am" in the viewer's time zone. */
+export function formatDateTime(iso: string): string {
+  return dateTime.format(new Date(iso));
+}
+
 export const STATUS_LABELS: Record<PropertyStatus, string> = {
   available: 'Available',
   under_construction: 'Under construction',

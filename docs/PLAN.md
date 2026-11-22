@@ -236,13 +236,13 @@ Visual design for every page: **`docs/design/DESIGN.md`** and its mocks. This se
 
 ### Admin (`/admin`, plainer styling)
 
-On first visit to any admin page, a small form asks for the admin key and checks it with one admin request (a 401 says "That key wasn't accepted" right away). It's kept in `sessionStorage`; an axios request interceptor sends it as `x-admin-key` on admin calls only, and a response interceptor clears it on a 401 and asks again. Admin routes are lazy-loaded (`React.lazy` + `Suspense`). Admin tables scroll sideways inside their own wrapper with the name column sticky, so the page never scrolls sideways at 320px. Sortable headers are buttons, with `aria-sort` on the `<th>`.
+On first visit to any admin page, a small form asks for the admin key and checks it with one admin request (a 401 says "That key wasn't accepted" right away). It's kept in `sessionStorage`; an axios request interceptor sends it as `x-admin-key` on admin calls only, and a response interceptor clears it on a 401 and asks again. A "Sign out" button in the admin sub-nav clears the key and the cached inquiries, shows the key prompt and a "Signed out" toast. On-screen copy says "Enquiries"; routes and code say `inquiries`. Admin routes are lazy-loaded (`React.lazy` + `Suspense`). Admin tables scroll sideways inside their own wrapper with the name column sticky, so the page never scrolls sideways at 320px. Sortable headers are buttons, with `aria-sort` on the `<th>`.
 
 **`/admin/properties`**: table with name, location, price, beds, status (all sortable, no pagination) and Edit / Delete actions. "Add property" button. Delete opens a confirm in a native `<dialog>` (no `window.confirm`) that names the cascade: "Delete {name}? Its {n} enquiries will also be deleted." (count from cached inquiries, else a general warning). Empty state.
 
-**`/admin/properties/new`** and **`/admin/properties/:id/edit`**: one shared form component (react-hook-form + shared Zod schema). Image URL preview. Price input: `inputMode="numeric"`, whole rupees, commas stripped on paste, live "₹6.5 Cr" preview. Client-side Zod validation, and server field errors mapped back onto the inputs.
+**`/admin/properties/new`** and **`/admin/properties/:id/edit`**: one shared form component (react-hook-form + shared Zod schema). Desktop: fields on the left, a larger 4:3 image preview on the right (sticky); stacked on mobile (fields, preview, buttons). Price input: `inputMode="numeric"`, whole rupees, commas stripped on paste, live "₹6.5 Cr" preview. Client-side Zod validation, and server field errors mapped back onto the inputs.
 
-**`/admin/inquiries`**: table with date, property (links to detail), name, email (`mailto:`), phone (`tel:`), message (truncated, expandable). Newest first by default, sortable, filter by property, search by name/email, client-side pagination at 20 per page. Empty state.
+**`/admin/inquiries`**: table with name (first, the sticky row header), date, property (links to detail), email (`mailto:`), phone (`tel:`), message (truncated, expandable). Newest first by default, sortable, filter by property, search by name/email, client-side pagination at 20 per page. Empty state.
 
 Toasts for create / update / delete success and failure.
 

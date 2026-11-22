@@ -27,6 +27,15 @@ export function useAdminProperty(id: number) {
   });
 }
 
+/** Every inquiry (newest first, capped at INQUIRY_LIMIT). Personal data: admin only. */
+export function useAdminInquiries() {
+  return useQuery({
+    queryKey: queryKeys.inquiries,
+    queryFn: ({ signal }) => request<Inquiry[]>('/inquiries', { signal, admin: true }),
+    staleTime: 30_000,
+  });
+}
+
 /**
  * Checks a key with one admin request. Not marked `admin`: the key isn't stored yet, and a
  * 401 here only means "wrong key". The inquiries it returns seed the cache.

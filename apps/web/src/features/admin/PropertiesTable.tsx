@@ -12,12 +12,12 @@ import type { Inquiry, Property } from '@white-lotus/shared';
 import { ConfirmDialog } from '../../components/ui/ConfirmDialog';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { ErrorState } from '../../components/ui/ErrorState';
-import { Skeleton } from '../../components/ui/Skeleton';
 import { ApiError } from '../../lib/apiClient';
 import { STATUS_LABELS, formatPrice } from '../../lib/format';
 import { queryKeys } from '../../lib/queryKeys';
 import { INQUIRY_LIMIT, useAdminProperties, useDeleteProperty } from './api';
 import { DataTable } from './DataTable';
+import { TableSkeleton } from './TableSkeleton';
 
 // Columns, fallback data and row ids at module scope: react-table needs stable inputs.
 // Built-in sorting functions: `text` for names and labels, `basic` for numbers.
@@ -68,7 +68,7 @@ export function PropertiesTable() {
     });
   }
 
-  if (isPending) return <TableSkeleton />;
+  if (isPending) return <TableSkeleton label="Loading properties" />;
   if (isError) {
     return (
       <ErrorState
@@ -136,19 +136,4 @@ function cascadeMessage(property: Property, inquiries: Inquiry[] | undefined): s
   return capped
     ? `At least ${count} ${noun} for it will also be deleted. ${end}`
     : `Its ${count} ${noun} will also be deleted. ${end}`;
-}
-
-function TableSkeleton() {
-  return (
-    <div role="status">
-      <span className="sr-only">Loading properties</span>
-      <div aria-hidden="true" className="space-y-px">
-        <Skeleton className="h-11 w-full" />
-        {Array.from({ length: 5 }, (_, i) => (
-          // Placeholders have no id and never reorder, so the index is a stable key here.
-          <Skeleton key={i} className="h-12 w-full opacity-60" />
-        ))}
-      </div>
-    </div>
-  );
 }

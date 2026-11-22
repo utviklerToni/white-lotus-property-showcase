@@ -22,6 +22,10 @@ const AdminPropertyEditPage = lazy(() =>
   })),
 );
 
+const AdminInquiriesPage = lazy(() =>
+  import('../pages/admin/AdminInquiriesPage').then((m) => ({ default: m.AdminInquiriesPage })),
+);
+
 // Shown while the admin shell's code loads (pages inside have their own fallback).
 const adminFallback = (
   <p role="status" className="page py-10 text-sm text-slate">
@@ -53,6 +57,7 @@ export const router = createBrowserRouter([
               { path: 'properties', element: <AdminPropertiesPage /> },
               { path: 'properties/new', element: <AdminPropertyNewPage /> },
               { path: 'properties/:id/edit', element: <AdminPropertyEditPage /> },
+              { path: 'inquiries', element: <AdminInquiriesPage /> },
             ],
           },
           // Unknown URL: throw a real 404, so RouteError (the errorElement above) shows not-found.

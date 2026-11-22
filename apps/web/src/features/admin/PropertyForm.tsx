@@ -2,7 +2,7 @@ import { useId, useState, type ClipboardEvent, type ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { useForm, useWatch, type Control, type DefaultValues } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import {
   PROPERTY_STATUSES,
@@ -260,11 +260,29 @@ export function PropertyForm({ property }: { property?: Property }) {
         <button
           type="submit"
           disabled={save.isPending}
-          className="btn-primary disabled:cursor-wait disabled:opacity-70"
+          className="btn-primary gap-2 disabled:cursor-wait disabled:opacity-70"
         >
-          {save.isPending ? 'Saving…' : property ? 'Save changes' : 'Add property'}
+          {save.isPending ? (
+            <>
+              <Loader2 aria-hidden="true" className="size-4 motion-safe:animate-spin" />
+              Saving…
+            </>
+          ) : property ? (
+            'Save changes'
+          ) : (
+            'Add property'
+          )}
         </button>
-        <Link to="/admin/properties" className="btn-secondary">
+        {/* A link can't be `disabled`: while saving, block the click and take it out of tab order. */}
+        <Link
+          to="/admin/properties"
+          aria-disabled={save.isPending}
+          tabIndex={save.isPending ? -1 : undefined}
+          onClick={(e) => {
+            if (save.isPending) e.preventDefault();
+          }}
+          className="btn-secondary aria-disabled:cursor-wait aria-disabled:opacity-70 aria-disabled:hover:bg-transparent aria-disabled:hover:text-navy"
+        >
           Cancel
         </Link>
       </div>

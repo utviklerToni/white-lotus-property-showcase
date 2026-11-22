@@ -84,6 +84,12 @@ describe('inquiryInputSchema', () => {
     );
   });
 
+  it.each(['', '   '])('asks for a phone number when phone is %j', (phone) => {
+    expect(errorFor(inquiryInputSchema, { ...inquiry, phone }, 'phone')).toBe(
+      'Enter a phone number',
+    );
+  });
+
   it('rejects letters in the phone number', () => {
     expect(errorFor(inquiryInputSchema, { ...inquiry, phone: '98450abc12' }, 'phone')).toBe(
       'Phone may only contain digits, spaces, + and -',

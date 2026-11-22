@@ -21,6 +21,8 @@ export const inquiryInputSchema = z
     phone: z
       .string({ error: 'Phone is required' })
       .trim()
+      // abort: an empty field stops here, so it doesn't also fail the character and digit checks.
+      .min(1, { error: 'Enter a phone number', abort: true })
       .regex(PHONE_CHARS, { error: 'Phone may only contain digits, spaces, + and -' })
       .refine((value) => countDigits(value) >= 10 && countDigits(value) <= 15, {
         error: 'Phone must have 10 to 15 digits',

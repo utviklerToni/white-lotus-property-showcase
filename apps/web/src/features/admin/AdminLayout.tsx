@@ -1,4 +1,3 @@
-import { Suspense } from 'react';
 import { NavLink, Outlet } from 'react-router';
 import { useQueryClient } from '@tanstack/react-query';
 import { Toaster, toast } from 'sonner';
@@ -12,7 +11,7 @@ const NAV = [
   { to: '/admin/inquiries', label: 'Enquiries' },
 ];
 
-// Admin shell: key gate, sub-nav, the lazy page, and the toasts (sonner loads with admin only).
+// Admin shell: key gate, sub-nav, the page, and the toasts (sonner loads with admin only).
 export function AdminLayout() {
   const queryClient = useQueryClient();
 
@@ -56,9 +55,7 @@ export function AdminLayout() {
             </li>
           </ul>
         </nav>
-        <Suspense fallback={<AdminLoading />}>
-          <Outlet />
-        </Suspense>
+        <Outlet />
       </AdminKeyGate>
       <Toaster
         position="bottom-right"
@@ -75,7 +72,7 @@ export function AdminLayout() {
   );
 }
 
-/** Suspense fallback while an admin page's code loads. */
+/** Shown while admin data loads (e.g. the edit form's property). */
 export function AdminLoading() {
   return (
     <p role="status" className="py-10 text-sm text-slate">

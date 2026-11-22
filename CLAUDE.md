@@ -99,7 +99,7 @@ Record the outcome under Deviations or Failures in PROGRESS.md.
 
 - No `memo` / `useMemo` / `useCallback` by default; only with a measured reason, stated in a comment.
 - Images: sized Unsplash URLs with `srcset` / `sizes`, a fixed aspect ratio (no layout shift), `decoding="async"`; `loading="lazy"` on cards, `fetchpriority="high"` on the detail hero.
-- Admin routes are lazy-loaded with `React.lazy` and a `Suspense` fallback.
+- Admin routes are lazy-loaded with react-router route-level `lazy` (no `React.lazy` + `Suspense`), with a `HydrateFallback`. The admin layout's `lazy` prefetches the admin page chunks and, with a saved key, both admin lists (D95).
 - TanStack Query: a sensible `staleTime`; `placeholderData: keepPreviousData` when filters change.
 - Fonts: `preconnect`, `display=swap`, only the weights used.
 - Stable keys (id, never index). Derive values during render instead of copying them into state.

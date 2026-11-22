@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router';
 import { useQueryClient } from '@tanstack/react-query';
 import {
   createColumnHelper,
@@ -85,13 +86,21 @@ export function PropertiesTable() {
         table={table}
         caption="Properties"
         actions={(property) => (
-          <button
-            type="button"
-            onClick={() => setToDelete(property)}
-            className="text-link min-h-11 text-[13px] text-danger decoration-danger"
-          >
-            Delete<span className="sr-only"> {property.name}</span>
-          </button>
+          <div className="inline-flex gap-5">
+            <Link
+              to={`/admin/properties/${property.id}/edit`}
+              className="text-link inline-flex min-h-11 items-center text-[13px] text-navy decoration-gold"
+            >
+              Edit<span className="sr-only"> {property.name}</span>
+            </Link>
+            <button
+              type="button"
+              onClick={() => setToDelete(property)}
+              className="text-link min-h-11 text-[13px] text-danger decoration-danger"
+            >
+              Delete<span className="sr-only"> {property.name}</span>
+            </button>
+          </div>
         )}
       />
       <ConfirmDialog

@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import type { Inquiry, Property } from '@white-lotus/shared';
-import { request } from '../../lib/apiClient';
+import type { Inquiry, Property, PropertyData } from '@white-lotus/shared';
+import { ApiError, request } from '../../lib/apiClient';
 import { queryKeys } from '../../lib/queryKeys';
 
 /** GET /api/inquiries returns at most this many rows (API `LIMIT 200`). */
@@ -12,6 +12,18 @@ export function useAdminProperties() {
     queryKey: queryKeys.properties(''),
     queryFn: ({ signal }) => request<Property[]>('/properties', { signal }),
     staleTime: 60_000,
+  });
+}
+
+/** One property for the edit form. Shares its cache entry with the public detail page. */
+export function useAdminProperty(id: number) {
+  return useQuery({
+    queryKey: queryKeys.property(id),
+    queryFn: ({ signal }) => request<Property>(`/properties/${id}`, { signal }),
+    staleTime: 60_000,
+    // An unknown id stays unknown: skip the retry on 404.
+    retry: (failureCount, error) =>
+      !(error instanceof ApiError && error.status === 404) && failureCount < 1,
   });
 }
 
@@ -37,6 +49,24 @@ export function useDeleteProperty() {
     onSettled: () => {
       void queryClient.invalidateQueries({ queryKey: queryKeys.allProperties });
       void queryClient.invalidateQueries({ queryKey: queryKeys.locations });
+    },
+  });
+}
+
+/** Create (no id) or full update (PUT) of a property. */
+export function useSaveProperty(id?: number) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (input: PropertyData) =>
+      id === undefined
+        ? request<Property>('/properties', { method: 'POST', body: input, admin: true })
+        : request<Property>(`/properties/${id}`, { method: 'PUT', body: input, admin: true }),
+    onSuccess: (property) => {
+      queryClient.setQueryData(queryKeys.property(property.id), property);
+      void queryClient.invalidateQueries({ queryKey: queryKeys.allProperties });
+      void queryClient.invalidateQueries({ queryKey: queryKeys.locations });
+      // Inquiries show the property name, which an edit may have changed.
+      if (id !== undefined) void queryClient.invalidateQueries({ queryKey: queryKeys.inquiries });
     },
   });
 }

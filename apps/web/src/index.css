@@ -45,6 +45,11 @@
   @apply caps inline-flex min-h-11 items-center justify-center bg-navy px-[22px] py-3.5 text-[11px] font-medium text-stone transition-colors duration-200 hover:bg-slate;
 }
 
+/* Secondary button (admin only): transparent, 1px navy outline (DESIGN.md §4). */
+@utility btn-secondary {
+  @apply caps inline-flex min-h-11 items-center justify-center border border-navy px-[22px] py-3.5 text-[11px] font-medium text-navy transition-colors duration-200 hover:bg-navy hover:text-stone;
+}
+
 /* Text link: 1px underline with an offset. Pair with a decoration colour if needed. */
 @utility text-link {
   @apply underline decoration-1 underline-offset-4 transition-colors duration-200;

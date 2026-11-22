@@ -27,7 +27,7 @@ Use current stable versions of everything. Tailwind v4 has **no `tailwind.config
 **Dependency allowlist.** Anything not listed here needs approval first.
 
 - api: `express`, `pg`, `zod`, `cors`, `helmet`, `express-rate-limit`, `tsx`
-- web: `react`, `react-dom`, `react-router` (pinned `^7`; import from `react-router`, not `react-router-dom`), `@tanstack/react-query`, `react-hook-form`, `@hookform/resolvers`, `lucide-react`, `sonner` (toasts), `tailwindcss`, `@tailwindcss/vite`, `clsx` + `tailwind-merge` (used only through the one `cn()` helper in `src/lib/cn.ts`)
+- web: `react`, `react-dom`, `react-router` (pinned `^7`; import from `react-router`, not `react-router-dom`), `@tanstack/react-query`, `axios` (the one HTTP client in `src/lib/apiClient.ts`; interceptors for the admin key and 401 handling in Phase 6), `react-hook-form`, `@hookform/resolvers`, `lucide-react`, `sonner` (toasts), `tailwindcss`, `@tailwindcss/vite`, `clsx` + `tailwind-merge` (used only through the one `cn()` helper in `src/lib/cn.ts`)
 - shared: `zod`
 - dev: `typescript`, `vitest`, `supertest`, `concurrently`, `vite`, `@vitejs/plugin-react`, `@types/*`, `eslint`, `@eslint/js`, `typescript-eslint`, `eslint-plugin-react-hooks`, `globals`, `prettier`, `eslint-config-prettier`
 

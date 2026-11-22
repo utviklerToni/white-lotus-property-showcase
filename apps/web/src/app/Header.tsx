@@ -1,8 +1,11 @@
 import { Link, NavLink } from 'react-router';
 import { cn } from '../lib/cn';
 
-// Inline links on every screen size (no menu button, D50). Admin joins in Phase 6.
-const NAV = [{ to: '/', label: 'Residences' }];
+// Inline links on every screen size (no menu button, D50).
+const NAV = [
+  { to: '/', label: 'Residences' },
+  { to: '/admin', label: 'Admin' },
+];
 
 export function Header() {
   return (
@@ -17,7 +20,8 @@ export function Header() {
               <li key={item.to}>
                 <NavLink
                   to={item.to}
-                  end
+                  // "Residences" is active on "/" only; "Admin" on every /admin page.
+                  end={item.to === '/'}
                   className={({ isActive }) =>
                     cn(
                       'caps flex min-h-11 items-center text-[11px] font-normal text-slate',

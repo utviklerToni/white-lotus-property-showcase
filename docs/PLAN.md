@@ -22,12 +22,12 @@ Working rules (session start, phases, self-checks, hard rules) are in `CLAUDE.md
 | Validation    | Zod (shared package)                                 | One source of truth for front and back                                                 |
 | Local infra   | Docker Compose (Postgres only, host port 5433)       | `docker compose up -d` and the DB is ready; 5433 avoids clashing with a local Postgres |
 
-Use current stable versions of everything. Tailwind v4 has **no `tailwind.config.js`**: theme tokens go in `apps/web/src/index.css` with `@theme` (see section 6).
+Use current stable versions of everything, but prefer a major version released 6+ months ago; a newer major needs a reason (D84). Tailwind v4 has **no `tailwind.config.js`**: theme tokens go in `apps/web/src/index.css` with `@theme` (see section 6).
 
 **Dependency allowlist.** Anything not listed here needs approval first.
 
 - api: `express`, `pg`, `zod`, `cors`, `helmet`, `express-rate-limit`, `tsx`
-- web: `react`, `react-dom`, `react-router` (pinned `^7`; import from `react-router`, not `react-router-dom`), `@tanstack/react-query`, `axios` (the one HTTP client in `src/lib/apiClient.ts`; interceptors for the admin key and 401 handling in Phase 6), `react-hook-form`, `@hookform/resolvers`, `lucide-react`, `sonner` (toasts), `tailwindcss`, `@tailwindcss/vite`, `clsx` + `tailwind-merge` (used only through the one `cn()` helper in `src/lib/cn.ts`)
+- web: `react`, `react-dom`, `react-router` (pinned `^7`; import from `react-router`, not `react-router-dom`), `@tanstack/react-query`, `axios` (the one HTTP client in `src/lib/apiClient.ts`; interceptors for the admin key and 401 handling in Phase 6), `react-hook-form`, `@hookform/resolvers`, `lucide-react`, `sonner` (toasts), `@tanstack/react-table` (pinned `^8`; headless tables for admin: sorting, filter, search, pagination; lazy-loaded with admin), `tailwindcss`, `@tailwindcss/vite`, `clsx` + `tailwind-merge` (used only through the one `cn()` helper in `src/lib/cn.ts`)
 - shared: `zod`
 - dev: `typescript`, `vitest`, `supertest`, `concurrently`, `vite`, `@vitejs/plugin-react`, `@types/*`, `eslint`, `@eslint/js`, `typescript-eslint`, `eslint-plugin-react-hooks`, `globals`, `prettier`, `eslint-config-prettier`
 
@@ -236,13 +236,13 @@ Visual design for every page: **`docs/design/DESIGN.md`** and its mocks. This se
 
 ### Admin (`/admin`, plainer styling)
 
-On first visit to any admin page, a small form asks for the admin key. It's kept in `sessionStorage` and sent as `x-admin-key`. A 401 clears it and asks again.
+On first visit to any admin page, a small form asks for the admin key and checks it with one admin request (a 401 says "That key wasn't accepted" right away). It's kept in `sessionStorage`; an axios request interceptor sends it as `x-admin-key` on admin calls only, and a response interceptor clears it on a 401 and asks again. Admin routes are lazy-loaded (`React.lazy` + `Suspense`). Admin tables scroll sideways inside their own wrapper with the name column sticky, so the page never scrolls sideways at 320px. Sortable headers are buttons, with `aria-sort` on the `<th>`.
 
-**`/admin/properties`**: table with name, location, price, beds, status and Edit / Delete actions. "Add property" button. Delete opens a confirm modal built in React (no `window.confirm`). Empty state.
+**`/admin/properties`**: table with name, location, price, beds, status (all sortable, no pagination) and Edit / Delete actions. "Add property" button. Delete opens a confirm in a native `<dialog>` (no `window.confirm`) that names the cascade: "Delete {name}? Its {n} enquiries will also be deleted." (count from cached inquiries, else a general warning). Empty state.
 
-**`/admin/properties/new`** and **`/admin/properties/:id/edit`**: one shared form component. Image URL preview. Client-side Zod validation, and server field errors mapped back onto the inputs.
+**`/admin/properties/new`** and **`/admin/properties/:id/edit`**: one shared form component (react-hook-form + shared Zod schema). Image URL preview. Price input: `inputMode="numeric"`, whole rupees, commas stripped on paste, live "₹6.5 Cr" preview. Client-side Zod validation, and server field errors mapped back onto the inputs.
 
-**`/admin/inquiries`**: table with date, property (links to detail), name, email (`mailto:`), phone (`tel:`), message (truncated, expandable). Optional property filter. Empty state.
+**`/admin/inquiries`**: table with date, property (links to detail), name, email (`mailto:`), phone (`tel:`), message (truncated, expandable). Newest first by default, sortable, filter by property, search by name/email, client-side pagination at 20 per page. Empty state.
 
 Toasts for create / update / delete success and failure.
 

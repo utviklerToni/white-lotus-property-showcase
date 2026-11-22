@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { clearAdminKey, getAdminKey } from './adminKey';
 
 // The app's one HTTP client (D77). Every failure becomes an ApiError with the API's
 // `{ error, fields? }` shape, so pages and forms handle one error type.
@@ -13,14 +14,38 @@ export class ApiError extends Error {
   }
 }
 
+// Lets a request mark itself as an admin call (read by the interceptors below).
+declare module 'axios' {
+  interface AxiosRequestConfig {
+    admin?: boolean;
+  }
+}
+
 // 15 s: room for a slow mobile connection, but a hung request still ends in a clear error.
 export const api = axios.create({ baseURL: '/api', timeout: 15_000 });
+
+// Admin calls carry the stored key. Public calls never send it.
+api.interceptors.request.use((config) => {
+  const key = getAdminKey();
+  if (config.admin && key) config.headers.set('x-admin-key', key);
+  return config;
+});
+
+// A 401 on an admin call means the stored key is wrong: forget it, and the key prompt returns.
+api.interceptors.response.use(undefined, (error: unknown) => {
+  if (axios.isAxiosError(error) && error.config?.admin && error.response?.status === 401) {
+    clearAdminKey(true);
+  }
+  return Promise.reject(error);
+});
 
 type RequestOptions = {
   method?: string;
   body?: unknown;
   headers?: Record<string, string>;
   signal?: AbortSignal;
+  /** Send the admin key (x-admin-key); a 401 clears it. */
+  admin?: boolean;
 };
 
 type ErrorBody = { error?: unknown; fields?: Record<string, string> };

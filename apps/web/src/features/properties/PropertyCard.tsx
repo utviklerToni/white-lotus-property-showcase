@@ -1,11 +1,12 @@
-import { useState } from 'react';
-import { Link } from 'react-router';
+import { useState, type MouseEvent } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router';
 import { BedDouble, Ruler } from 'lucide-react';
 import type { Property } from '@white-lotus/shared';
 import { cn } from '../../lib/cn';
 import { formatArea, formatBeds, formatNumber, formatPrice } from '../../lib/format';
 import { imageSources } from '../../lib/images';
 import { StatusBadge } from '../../components/ui/StatusBadge';
+import type { FromListingState } from './listingReturn';
 
 // Rendered width of a card image per breakpoint (grid 1 / 2 / 3 columns, page padding, gaps).
 const SIZES = '(min-width: 1024px) 342px, (min-width: 768px) calc(50vw - 68px), calc(100vw - 48px)';
@@ -13,11 +14,25 @@ const SIZES = '(min-width: 1024px) 342px, (min-width: 768px) calc(50vw - 68px), 
 export function PropertyCard({ property }: { property: Property }) {
   // Only for the 300 ms fade-in (DESIGN.md §5); the sand box shows until the photo arrives.
   const [loaded, setLoaded] = useState(false);
+  const { search } = useLocation();
+  const navigate = useNavigate();
   const { src, srcSet } = imageSources(property.image_url, 4 / 3);
+  const href = `/properties/${property.id}`;
+
+  // Plain clicks navigate here, so the state holds the scroll position at click time (D76).
+  // Ctrl/Cmd/Shift/middle clicks (new tab or window) are left to the browser.
+  function openDetail(event: MouseEvent<HTMLAnchorElement>) {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+      return;
+    }
+    event.preventDefault();
+    const state: FromListingState = { listingSearch: search, listingScrollY: window.scrollY };
+    void navigate(href, { state });
+  }
 
   return (
     // The whole card is one link: one Tab stop, no nested interactive elements.
-    <Link to={`/properties/${property.id}`} className="group block">
+    <Link to={href} onClick={openDetail} className="group block">
       <div className="relative aspect-[4/3] overflow-hidden bg-sand">
         {/* Zoom on the wrapper (700 ms), fade on the image (300 ms): DESIGN.md §5. */}
         <div className="size-full transition-transform duration-700 group-hover:scale-[1.03]">

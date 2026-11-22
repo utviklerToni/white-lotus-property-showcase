@@ -1,6 +1,7 @@
 import { createBrowserRouter, data } from 'react-router';
 import { Layout } from './Layout';
 import { PropertiesPage } from '../pages/PropertiesPage';
+import { PropertyDetailPage } from '../pages/PropertyDetailPage';
 import { RouteError } from './RouteError';
 
 export const router = createBrowserRouter([
@@ -14,6 +15,7 @@ export const router = createBrowserRouter([
         errorElement: <RouteError />,
         children: [
           { index: true, element: <PropertiesPage /> },
+          { path: 'properties/:id', element: <PropertyDetailPage /> },
           // Unknown URL: throw a real 404, so RouteError (the errorElement above) shows not-found.
           {
             path: '*',

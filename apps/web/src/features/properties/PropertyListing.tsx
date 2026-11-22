@@ -1,10 +1,12 @@
-import { Link, useSearchParams } from 'react-router';
+import { useEffect } from 'react';
+import { Link, useLocation, useSearchParams } from 'react-router';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { ErrorState } from '../../components/ui/ErrorState';
 import { cn } from '../../lib/cn';
 import { useProperties } from './api';
 import { FilterBar } from './FilterBar';
 import { filtersToParams, readFilters } from './filters';
+import { readRestoreScrollY } from './listingReturn';
 import { PropertyCard } from './PropertyCard';
 import { PropertyCardSkeleton } from './PropertyCardSkeleton';
 
@@ -17,11 +19,22 @@ export function PropertyListing() {
   const filtered = filtersToParams(filters).size > 0;
   const { data, isPending, isError, error, refetch, isPlaceholderData } = useProperties(filters);
 
+  // Reached through "← All residences": scroll back to where the card was clicked (D76), once the
+  // results are on the page. Runs after ScrollRestoration's reset to the top (a layout effect).
+  const location = useLocation();
+  const restoreScrollY = readRestoreScrollY(location.state);
+  const ready = !isPending;
+  useEffect(() => {
+    if (ready && restoreScrollY !== undefined) window.scrollTo(0, restoreScrollY);
+  }, [ready, restoreScrollY, location.key]);
+
   return (
     <>
       <FilterBar filters={filters} count={isError ? undefined : data?.length} />
 
-      <section aria-label="Residences" className="page mt-7 md:mt-10">
+      {/* Min height of about one card row: going from a few results to none doesn't shrink the
+          page, so the browser never clamps the scroll position upward. */}
+      <section aria-label="Residences" className="page mt-7 min-h-[440px] md:mt-10 md:min-h-[60vh]">
         {isPending ? (
           <div role="status" className={GRID}>
             <span className="sr-only">Loading residences</span>
@@ -37,11 +50,17 @@ export function PropertyListing() {
             onRetry={() => void refetch()}
           />
         ) : data.length === 0 ? (
+          // pt: about 44px below the count line (section margin + this padding).
           <EmptyState
             title={filtered ? 'No residences match these filters' : 'No residences are listed yet'}
+            className="pt-4 md:pt-1"
           >
             {filtered && (
-              <Link to={{ search: '' }} className="text-link text-[13px] text-navy decoration-gold">
+              <Link
+                to={{ search: '' }}
+                preventScrollReset
+                className="text-link text-[13px] text-navy decoration-gold"
+              >
                 Clear filters
               </Link>
             )}

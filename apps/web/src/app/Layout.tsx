@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router';
+import { Outlet, ScrollRestoration } from 'react-router';
 import { Footer } from './Footer';
 import { Header } from './Header';
 
@@ -18,6 +18,9 @@ export function Layout() {
         <Outlet />
       </main>
       <Footer />
+      {/* New pages open at the top; browser Back restores the previous scroll position.
+          Filter changes opt out with preventScrollReset; "← All residences" restores its own (D76). */}
+      <ScrollRestoration />
     </div>
   );
 }

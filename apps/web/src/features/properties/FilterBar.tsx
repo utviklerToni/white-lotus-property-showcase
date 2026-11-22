@@ -28,7 +28,7 @@ export function FilterBar({ filters, count }: FilterBarProps) {
   const hasFilters = filtersToParams(filters).size > 0;
 
   // Writes one filter to the URL; "Any" (empty) removes it. Replace, so filter changes
-  // don't pile up in the back-button history.
+  // don't pile up in the back-button history; preventScrollReset, so the page stays put.
   function setFilter(key: keyof PropertyListQuery, value: string) {
     setSearchParams(
       (prev) => {
@@ -37,7 +37,7 @@ export function FilterBar({ filters, count }: FilterBarProps) {
         else next.delete(key);
         return next;
       },
-      { replace: true },
+      { replace: true, preventScrollReset: true },
     );
   }
 
@@ -80,8 +80,14 @@ export function FilterBar({ filters, count }: FilterBarProps) {
         <p aria-live="polite" className="text-slate">
           {count !== undefined && `${count} ${count === 1 ? 'residence' : 'residences'}`}
         </p>
-        {hasFilters && (
-          <Link to={{ search: '' }} replace className="text-link text-navy decoration-gold">
+        {/* With no results, the empty state's "Clear filters" is the only one. */}
+        {hasFilters && count !== 0 && (
+          <Link
+            to={{ search: '' }}
+            replace
+            preventScrollReset
+            className="text-link text-navy decoration-gold"
+          >
             Clear filters
           </Link>
         )}

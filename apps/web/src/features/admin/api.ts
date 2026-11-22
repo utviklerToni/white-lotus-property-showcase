@@ -1,5 +1,12 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  type QueryClient,
+  queryOptions,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import type { Inquiry, Property, PropertyData } from '@white-lotus/shared';
+import { getAdminKey } from '../../lib/adminKey';
 import { ApiError, request } from '../../lib/apiClient';
 import { queryKeys } from '../../lib/queryKeys';
 
@@ -7,12 +14,21 @@ import { queryKeys } from '../../lib/queryKeys';
 export const INQUIRY_LIMIT = 200;
 
 /** The unfiltered list, newest first. Shares its cache entry with the public listing. */
+const adminPropertiesQuery = queryOptions({
+  queryKey: queryKeys.properties(''),
+  queryFn: ({ signal }) => request<Property[]>('/properties', { signal }),
+  staleTime: 60_000,
+});
+
+/** Every inquiry (newest first, capped at INQUIRY_LIMIT). Personal data: admin only. */
+const adminInquiriesQuery = queryOptions({
+  queryKey: queryKeys.inquiries,
+  queryFn: ({ signal }) => request<Inquiry[]>('/inquiries', { signal, admin: true }),
+  staleTime: 30_000,
+});
+
 export function useAdminProperties() {
-  return useQuery({
-    queryKey: queryKeys.properties(''),
-    queryFn: ({ signal }) => request<Property[]>('/properties', { signal }),
-    staleTime: 60_000,
-  });
+  return useQuery(adminPropertiesQuery);
 }
 
 /** One property for the edit form. Shares its cache entry with the public detail page. */
@@ -27,13 +43,20 @@ export function useAdminProperty(id: number) {
   });
 }
 
-/** Every inquiry (newest first, capped at INQUIRY_LIMIT). Personal data: admin only. */
 export function useAdminInquiries() {
-  return useQuery({
-    queryKey: queryKeys.inquiries,
-    queryFn: ({ signal }) => request<Inquiry[]>('/inquiries', { signal, admin: true }),
-    staleTime: 30_000,
-  });
+  return useQuery(adminInquiriesQuery);
+}
+
+/**
+ * Fills both admin tables' cache before the first click, so switching tabs shows data
+ * at once. Only with a saved key: without one the gate shows the prompt and nothing loads.
+ * The properties request is public and carries no key. Errors are swallowed by
+ * prefetchQuery; the page's own query then retries and shows its error state.
+ */
+export function prefetchAdminLists(client: QueryClient) {
+  if (getAdminKey() === null) return;
+  void client.prefetchQuery(adminPropertiesQuery);
+  void client.prefetchQuery(adminInquiriesQuery);
 }
 
 /**

@@ -1,32 +1,42 @@
 import { lazy, Suspense } from 'react';
 import { Navigate, createBrowserRouter, data } from 'react-router';
+import { queryClient } from '../lib/queryClient';
 import { Layout } from './Layout';
 import { PropertiesPage } from '../pages/PropertiesPage';
 import { PropertyDetailPage } from '../pages/PropertyDetailPage';
 import { RouteError } from './RouteError';
 
 // Admin code is split out (React.lazy), so the public pages never download it.
-const AdminLayout = lazy(() =>
-  import('../features/admin/AdminLayout').then((m) => ({ default: m.AdminLayout })),
-);
-const AdminPropertiesPage = lazy(() =>
-  import('../pages/admin/AdminPropertiesPage').then((m) => ({ default: m.AdminPropertiesPage })),
-);
+const loadAdminProperties = () => import('../pages/admin/AdminPropertiesPage');
+const loadAdminPropertyNew = () => import('../pages/admin/AdminPropertyNewPage');
+const loadAdminPropertyEdit = () => import('../pages/admin/AdminPropertyEditPage');
+const loadAdminInquiries = () => import('../pages/admin/AdminInquiriesPage');
 
+// Loading the admin shell also starts every admin page chunk, once. The browser caches each
+// module, so the first click between admin pages doesn't show the Suspense fallback. It also
+// prefetches both admin lists (only with a saved key), so the first click shows data at once.
+const AdminLayout = lazy(() => {
+  void import('../features/admin/api').then((m) => m.prefetchAdminLists(queryClient));
+  void loadAdminProperties();
+  void loadAdminPropertyNew();
+  void loadAdminPropertyEdit();
+  void loadAdminInquiries();
+  return import('../features/admin/AdminLayout').then((m) => ({ default: m.AdminLayout }));
+});
+const AdminPropertiesPage = lazy(() =>
+  loadAdminProperties().then((m) => ({ default: m.AdminPropertiesPage })),
+);
 const AdminPropertyNewPage = lazy(() =>
-  import('../pages/admin/AdminPropertyNewPage').then((m) => ({ default: m.AdminPropertyNewPage })),
+  loadAdminPropertyNew().then((m) => ({ default: m.AdminPropertyNewPage })),
 );
 const AdminPropertyEditPage = lazy(() =>
-  import('../pages/admin/AdminPropertyEditPage').then((m) => ({
-    default: m.AdminPropertyEditPage,
-  })),
+  loadAdminPropertyEdit().then((m) => ({ default: m.AdminPropertyEditPage })),
 );
-
 const AdminInquiriesPage = lazy(() =>
-  import('../pages/admin/AdminInquiriesPage').then((m) => ({ default: m.AdminInquiriesPage })),
+  loadAdminInquiries().then((m) => ({ default: m.AdminInquiriesPage })),
 );
 
-// Shown while the admin shell's code loads (pages inside have their own fallback).
+// Shown while the admin shell's code loads. AdminLayout has the one boundary around its outlet.
 const adminFallback = (
   <p role="status" className="page py-10 text-sm text-slate">
     Loading admin…

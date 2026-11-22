@@ -1,4 +1,4 @@
-import { useState, type MouseEvent } from 'react';
+import { useId, useState, type MouseEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { BedDouble, Ruler } from 'lucide-react';
 import type { Property } from '@white-lotus/shared';
@@ -14,6 +14,7 @@ const SIZES = '(min-width: 1024px) 342px, (min-width: 768px) calc(50vw - 68px), 
 export function PropertyCard({ property }: { property: Property }) {
   // Only for the 300 ms fade-in (DESIGN.md §5); the sand box shows until the photo arrives.
   const [loaded, setLoaded] = useState(false);
+  const id = useId();
   const { search } = useLocation();
   const navigate = useNavigate();
   const { src, srcSet } = imageSources(property.image_url, 4 / 3);
@@ -32,7 +33,13 @@ export function PropertyCard({ property }: { property: Property }) {
 
   return (
     // The whole card is one link: one Tab stop, no nested interactive elements.
-    <Link to={href} onClick={openDetail} className="group block">
+    // aria-labelledby: screen readers hear "{name} {price}", not every line of the card.
+    <Link
+      to={href}
+      onClick={openDetail}
+      aria-labelledby={`${id}-name ${id}-price`}
+      className="group block"
+    >
       <div className="relative aspect-[4/3] overflow-hidden bg-sand">
         {/* Zoom on the wrapper (700 ms), fade on the image (300 ms): DESIGN.md §5. */}
         <div className="size-full transition-transform duration-700 group-hover:scale-[1.03]">
@@ -59,7 +66,10 @@ export function PropertyCard({ property }: { property: Property }) {
         <span className="caps text-[10px] text-gold-text">{formatNumber(property.id)}</span>
         <span className="caps text-right text-[10px] text-slate">{property.location}</span>
       </div>
-      <h2 className="mt-1.5 mb-3 font-serif text-[28px] leading-tight font-medium text-navy md:text-[30px]">
+      <h2
+        id={`${id}-name`}
+        className="mt-1.5 mb-3 font-serif text-[28px] leading-tight font-medium text-navy md:text-[30px]"
+      >
         {property.name}
       </h2>
 
@@ -74,7 +84,10 @@ export function PropertyCard({ property }: { property: Property }) {
             {formatArea(property.size_sqft)}
           </span>
         </span>
-        <span className="text-[17px] font-normal whitespace-nowrap text-navy tabular-nums">
+        <span
+          id={`${id}-price`}
+          className="text-[17px] font-normal whitespace-nowrap text-navy tabular-nums"
+        >
           {formatPrice(property.price)}
         </span>
       </div>

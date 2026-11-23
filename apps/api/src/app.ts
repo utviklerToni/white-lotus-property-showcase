@@ -20,6 +20,10 @@ type AppOptions = {
 export function createApp({ rateLimit = true }: AppOptions = {}) {
   const app = express();
 
+  // Caddy runs on the same host and sets X-Forwarded-For; trust only a loopback proxy
+  // so rate limits key on the real visitor IP and the header can't be spoofed from outside.
+  app.set('trust proxy', 'loopback');
+
   // First, so even rejected requests (bad JSON, rate-limited) get logged.
   app.use(requestLogger);
   app.use(helmet());

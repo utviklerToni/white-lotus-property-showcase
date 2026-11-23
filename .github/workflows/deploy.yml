@@ -1,0 +1,57 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build -w apps/web
+
+  deploy:
+    needs: check
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "${{ secrets.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+
+      - name: Deploy on server
+        run: |
+          ssh app@${{ secrets.SSH_HOST }} "BRANCH=${{ github.ref_name }} bash -se" <<'EOF'
+          set -euo pipefail
+          cd ~/white-lotus-property-showcase
+          git fetch origin "$BRANCH"
+          git reset --hard "origin/$BRANCH"
+          npm ci
+          set -a; . /etc/white-lotus.env; set +a
+          npm run db:migrate
+          VITE_COMMIT_SHA=$(git rev-parse --short HEAD) npm run build -w apps/web
+          rsync -a --delete apps/web/dist/ /var/www/white-lotus/
+          sudo /usr/bin/systemctl restart white-lotus-api
+          sleep 5
+          curl -fsS localhost:4000/api/health
+          echo
+          echo "Deployed $(git rev-parse --short HEAD)"
+          EOF

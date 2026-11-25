@@ -177,9 +177,11 @@ export function FilterSheet({ filters }: { filters: PropertyListQuery }) {
                 <m.fieldset key={group.key} variants={drift} className="pt-3 pb-1">
                   <legend className="caps pt-3 text-[10px] text-cream/65">{group.label}</legend>
                   {group.options.map((option) => (
+                    // 36px rows, the whole row is the tap target: denser than the 44px used
+                    // elsewhere, still above WCAG 2.2 AA's 24px minimum (DESIGN.md §6).
                     <label
                       key={option.value}
-                      className="flex min-h-11 cursor-pointer items-center gap-3 text-sm"
+                      className="flex min-h-9 cursor-pointer items-center gap-3 text-sm"
                     >
                       <input
                         type="radio"

@@ -10,9 +10,9 @@ import {
   HIDDEN,
   MORPH,
   SHOWN,
+  backdrop,
   drift,
   pillLabel,
-  sheetBackdrop,
   sheetChevron,
   sheetContents,
 } from '../../lib/motion';
@@ -115,7 +115,7 @@ export function FilterSheet({ filters }: { filters: PropertyListQuery }) {
             initial={reduceMotion ? false : HIDDEN}
             animate={SHOWN}
             exit={reduceMotion ? undefined : EXIT}
-            variants={sheetBackdrop}
+            variants={backdrop}
             onClick={close}
             className="fixed inset-0 z-[45] bg-espresso/40 md:hidden"
           />

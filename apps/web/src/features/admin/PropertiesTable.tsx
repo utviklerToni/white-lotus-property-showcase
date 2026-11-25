@@ -21,16 +21,22 @@ import { TableSkeleton } from './TableSkeleton';
 
 // Columns, fallback data and row ids at module scope: react-table needs stable inputs.
 // Built-in sorting functions: `text` for names and labels, `basic` for numbers.
+// Below md only Name, Status and the actions show (hideBelowMd), so the table fits a phone.
 const helper = createColumnHelper<Property>();
 const columns = [
   helper.accessor('name', { header: 'Name', sortingFn: 'text' }),
-  helper.accessor('location', { header: 'Location', sortingFn: 'text' }),
+  helper.accessor('location', {
+    header: 'Location',
+    sortingFn: 'text',
+    meta: { hideBelowMd: true },
+  }),
   helper.accessor('price', {
     header: 'Price',
     sortingFn: 'basic',
+    meta: { hideBelowMd: true },
     cell: (info) => <span className="tabular-nums">{formatPrice(info.getValue())}</span>,
   }),
-  helper.accessor('bedrooms', { header: 'Beds', sortingFn: 'basic' }),
+  helper.accessor('bedrooms', { header: 'Beds', sortingFn: 'basic', meta: { hideBelowMd: true } }),
   // Sorted by the label people see, not the stored value.
   helper.accessor((row) => STATUS_LABELS[row.status], {
     id: 'status',

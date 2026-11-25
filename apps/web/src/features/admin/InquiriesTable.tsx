@@ -30,35 +30,40 @@ const nameOrEmail: FilterFn<Inquiry> = (row, _columnId, search: string) => {
 
 // Columns, fallback data and row ids at module scope: react-table needs stable inputs.
 // The person's name comes first: it is the sticky row header while the table scrolls.
+// Below md the Date and Property columns are hidden and their values sit under the name; email,
+// phone and message stay (they are what an enquiry is for) and scroll inside the table.
 const helper = createColumnHelper<Inquiry>();
 const columns = [
-  helper.accessor('name', { header: 'Name', sortingFn: 'text' }),
+  helper.accessor('name', {
+    header: 'Name',
+    sortingFn: 'text',
+    cell: (info) => (
+      <>
+        {info.getValue()}
+        <span className="mt-1 flex flex-col gap-1 text-[13px] text-slate md:hidden">
+          <PropertyLink inquiry={info.row.original} />
+          <EnquiryDate inquiry={info.row.original} />
+        </span>
+      </>
+    ),
+  }),
   // Sorted by the timestamp, shown as a readable date.
   helper.accessor((row) => Date.parse(row.created_at), {
     id: 'date',
     header: 'Date',
     sortingFn: 'basic',
     sortDescFirst: true,
-    cell: (info) => (
-      <time dateTime={info.row.original.created_at} className="whitespace-nowrap tabular-nums">
-        {formatDateTime(info.row.original.created_at)}
-      </time>
-    ),
+    meta: { hideBelowMd: true },
+    cell: (info) => <EnquiryDate inquiry={info.row.original} />,
   }),
   helper.accessor('property_name', {
     id: 'property',
     header: 'Property',
     sortingFn: 'text',
+    meta: { hideBelowMd: true },
     // The property filter compares ids, so two listings with the same name stay apart.
     filterFn: (row, _columnId, propertyId: number) => row.original.property_id === propertyId,
-    cell: (info) => (
-      <Link
-        to={`/properties/${info.row.original.property_id}`}
-        className="text-link decoration-gold"
-      >
-        {info.getValue()}
-      </Link>
-    ),
+    cell: (info) => <PropertyLink inquiry={info.row.original} />,
   }),
   helper.accessor('email', {
     header: 'Email',
@@ -215,6 +220,22 @@ export function InquiriesTable() {
         </>
       )}
     </>
+  );
+}
+
+function EnquiryDate({ inquiry }: { inquiry: Inquiry }) {
+  return (
+    <time dateTime={inquiry.created_at} className="whitespace-nowrap tabular-nums">
+      {formatDateTime(inquiry.created_at)}
+    </time>
+  );
+}
+
+function PropertyLink({ inquiry }: { inquiry: Inquiry }) {
+  return (
+    <Link to={`/properties/${inquiry.property_id}`} className="text-link decoration-gold">
+      {inquiry.property_name}
+    </Link>
   );
 }
 

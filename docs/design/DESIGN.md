@@ -120,7 +120,7 @@ Stone, hairline top. Small caps: "White Lotus · Bengaluru" (slate) left, "Since
 - Route error / 404: same style, with a link back to Residences.
 
 ### Admin
-Same tokens and fonts, denser and plainer: stone background, white table rows separated by hairlines, small caps column headers, navy primary buttons, secondary outline buttons. Form inputs: white fill, no border, label above, inline error text below in a readable red (`#9B2C2C`, 4.5:1+). Delete confirmation in a native `<dialog>` with focus trapped and Escape to close.
+Same tokens and fonts, denser and plainer: stone background, white table rows separated by hairlines, small caps column headers, navy primary buttons, secondary outline buttons. Form inputs: white fill, no border, label above, inline error text below in a readable red (`#9B2C2C`, 4.5:1+). Delete confirmation in a native `<dialog>` with focus trapped and Escape to close, fixed and centred, at most `100vw - 2rem` wide, buttons stacked full width on phones, page scroll locked while open. On phones the tables drop low-priority columns so Name and the actions fit without scrolling (D105–D107).
 
 ---
 

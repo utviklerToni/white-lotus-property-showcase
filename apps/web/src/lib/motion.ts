@@ -220,6 +220,9 @@ export const menuFoot: Variants = {
 /** The foot's short rule, timed by the foot group. */
 export const menuRule = goldLine(DURATION.lineIn);
 
+/** The footer's gold line, timed by the footer's drift group (no delay of its own). */
+export const footerLine = goldLine(DURATION.lineIn);
+
 /**
  * One line of the two-line menu icon; `custom` is 1 for the top line, -1 for the bottom one.
  * Shown, the lines meet in the middle (they sit 6px apart) and turn into an X.

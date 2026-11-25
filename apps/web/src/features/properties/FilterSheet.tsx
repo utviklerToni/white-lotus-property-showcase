@@ -141,8 +141,8 @@ export function FilterSheet({ filters }: { filters: PropertyListQuery }) {
               wrapFocus(event);
             }}
             // borderRadius in style, so Motion keeps the corners round while it scales the card.
-            style={{ borderRadius: 16 }}
-            className="pointer-events-auto flex w-[180px] max-w-full flex-col overflow-hidden bg-espresso/95 text-cream backdrop-blur-md"
+            style={{ borderRadius: 20 }}
+            className="pointer-events-auto flex w-[240px] max-w-full flex-col overflow-hidden bg-espresso/95 text-cream backdrop-blur-md"
           >
             <div className="flex items-center justify-between py-2 pr-2 pl-5">
               <h2 id={titleId} className="text-[13px]">
@@ -167,8 +167,8 @@ export function FilterSheet({ filters }: { filters: PropertyListQuery }) {
             {/* Scrolls inside past 60vh. relative: the sr-only radios are positioned against it,
                 so they can't escape and widen anything; overflow-x-hidden: the drift never shows
                 a sideways scrollbar (the menu's lesson, F21). Right side: 14px padding plus a
-                stable scrollbar gutter (0 on phones, 6px with desktop scrollbars), so the rows
-                always get at least 140px and "Under construction" (138px) stays on one line. */}
+                stable scrollbar gutter (0 on phones, 6px with desktop scrollbars), so the inset
+                stays about 20px with either kind of scrollbar. */}
             <m.div
               variants={sheetContents}
               className="sheet-scroll relative max-h-[60vh] overflow-x-hidden overflow-y-auto pr-3.5 pb-2 pl-5"

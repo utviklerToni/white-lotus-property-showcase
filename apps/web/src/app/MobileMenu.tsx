@@ -8,6 +8,7 @@ import {
   HIDDEN,
   SHOWN,
   drift,
+  menuContents,
   menuFoot,
   menuIconLine,
   menuItem,
@@ -68,72 +69,78 @@ export function MobileMenu({ open, id, onClose, triggerRef }: MobileMenuProps) {
             if (event.key === 'Escape') onClose();
             if (event.key === 'Tab') wrapFocus(event);
           }}
-          // w-full on each row: `page` centres with auto margins, which shrinks flex children.
-          className="fixed inset-0 z-50 flex flex-col overflow-y-auto bg-espresso text-cream md:hidden"
+          // The panel: always full screen, it only fades (menuOverlay). The contents drift.
+          className="fixed inset-0 z-50 overflow-y-auto bg-espresso text-cream md:hidden"
         >
-          {/* Same row as the header, so Close sits exactly where Menu was. */}
-          <div className="page flex w-full items-center justify-between py-[18px]">
-            {/* The mask for the wordmark's slide. */}
-            <span className="flex min-h-11 items-center overflow-hidden">
-              <m.span
-                variants={menuWordmark}
-                className="block font-serif text-[22px] leading-none font-semibold"
+          {/* w-full on each row: `page` centres with auto margins, which shrinks flex children. */}
+          <m.div variants={menuContents} className="flex min-h-full flex-col">
+            {/* Same row as the header, so Close sits exactly where Menu was. */}
+            <div className="page flex w-full items-center justify-between py-[18px]">
+              {/* The mask for the wordmark's slide. */}
+              <span className="flex min-h-11 items-center overflow-hidden">
+                <m.span
+                  variants={menuWordmark}
+                  className="block font-serif text-[22px] leading-none font-semibold"
+                >
+                  White Lotus
+                </m.span>
+              </span>
+              <button
+                ref={closeRef}
+                type="button"
+                onClick={onClose}
+                className="caps flex min-h-11 items-center gap-3 text-[11px] text-cream"
               >
-                White Lotus
-              </m.span>
-            </span>
-            <button
-              ref={closeRef}
-              type="button"
-              onClick={onClose}
-              className="caps flex min-h-11 items-center gap-3 text-[11px] text-cream"
+                Close<span className="sr-only"> menu</span>
+                <MenuIcon />
+              </button>
+            </div>
+
+            <nav
+              aria-label="Main"
+              className="page flex w-full flex-1 flex-col justify-center py-10"
             >
-              Close<span className="sr-only"> menu</span>
-              <MenuIcon />
-            </button>
-          </div>
-
-          <nav aria-label="Main" className="page flex w-full flex-1 flex-col justify-center py-10">
-            <m.ul variants={menuItems} className="flex flex-col gap-4">
-              {NAV.map((item, index) => (
-                <m.li key={item.to} variants={menuItem}>
-                  {/* A navigation closes the menu on its own (Header); onClick covers a tap on
+              <m.ul variants={menuItems} className="flex flex-col gap-4">
+                {NAV.map((item, index) => (
+                  <m.li key={item.to} variants={menuItem}>
+                    {/* A navigation closes the menu on its own (Header); onClick covers a tap on
                       the page you are already on. */}
-                  <NavLink
-                    to={item.to}
-                    end={item.to === '/'}
-                    onClick={onClose}
-                    className="block py-2"
-                  >
-                    {({ isActive }) => (
-                      <>
-                        <span className="flex items-baseline gap-4">
-                          <span aria-hidden className="caps text-[11px] text-gold tabular-nums">
-                            {String(index + 1).padStart(2, '0')}
+                    <NavLink
+                      to={item.to}
+                      end={item.to === '/'}
+                      onClick={onClose}
+                      className="block py-2"
+                    >
+                      {({ isActive }) => (
+                        <>
+                          <span className="flex items-baseline gap-4">
+                            <span aria-hidden className="caps text-[11px] text-gold tabular-nums">
+                              {String(index + 1).padStart(2, '0')}
+                            </span>
+                            <span className="font-serif text-[36px] leading-tight font-medium">
+                              {item.label}
+                            </span>
                           </span>
-                          <span className="font-serif text-[36px] leading-tight font-medium">
-                            {item.label}
-                          </span>
-                        </span>
-                        {/* Every item has a hairline; the current page's is full gold. */}
-                        <m.span
-                          aria-hidden
-                          variants={menuItemLine}
-                          className={cn('mt-3 block h-px bg-gold', !isActive && 'opacity-35')}
-                        />
-                      </>
-                    )}
-                  </NavLink>
-                </m.li>
-              ))}
-            </m.ul>
-          </nav>
+                          {/* Every item has a hairline; the current page's is full gold. */}
+                          <m.span
+                            aria-hidden
+                            variants={menuItemLine}
+                            className={cn('mt-3 block h-px bg-gold', !isActive && 'opacity-35')}
+                          />
+                        </>
+                      )}
+                    </NavLink>
+                  </m.li>
+                ))}
+              </m.ul>
+            </nav>
 
-          <m.div variants={menuFoot} className="page w-full pb-10">
-            <m.span aria-hidden variants={menuRule} className="block h-px w-10 bg-gold" />
-            <m.p variants={drift} className="caps mt-4 text-[11px] text-cream">
-              Bengaluru
-            </m.p>
+            <m.div variants={menuFoot} className="page w-full pb-10">
+              <m.span aria-hidden variants={menuRule} className="block h-px w-10 bg-gold" />
+              <m.p variants={drift} className="caps mt-4 text-[11px] text-cream">
+                Bengaluru
+              </m.p>
+            </m.div>
           </m.div>
         </m.div>
       )}

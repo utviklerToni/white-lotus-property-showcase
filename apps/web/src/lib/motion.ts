@@ -128,7 +128,7 @@ export const statReveal: Variants = {
 // the foot. Closing runs the other way and everything leaves to the right. Children timed by a
 // parent (items, hairlines, foot) have no delay of their own, as it would replace the parent's.
 const MENU = {
-  /** How far the overlay drifts, in px. */
+  /** How far the overlay's contents drift, in px. */
   overlayX: 24,
   wordmarkIn: 0.12,
   /** The wordmark leaves after the items have started to. */
@@ -143,14 +143,33 @@ const MENU = {
   footGap: 0.15,
 } as const;
 
-/** The overlay itself: fades in drifting from the left; leaves to the right after its children. */
+// The overlay leaves once its contents have: the wordmark is last (its delay plus its slide).
+const MENU_CONTENTS_OUT = MENU.wordmarkOut + DURATION.heroOut;
+
+/**
+ * The overlay's background panel: opacity only. It never moves, so it covers the whole screen at
+ * every frame (a drifting panel showed a strip of page beside it).
+ */
 export const menuOverlay: Variants = {
-  [HIDDEN]: { opacity: 0, x: -MENU.overlayX },
-  [SHOWN]: { opacity: 1, x: 0, transition: { duration: DURATION.overlayIn, ease: easeOut } },
+  [HIDDEN]: { opacity: 0 },
+  [SHOWN]: { opacity: 1, transition: { duration: DURATION.overlayIn, ease: easeOut } },
   [EXIT]: {
     opacity: 0,
+    transition: { duration: DURATION.overlayOut, ease: easeIn, delay: MENU_CONTENTS_OUT },
+  },
+};
+
+/**
+ * Everything on the panel: drifts in from the left with the panel's fade, out to the right as it
+ * fades out. Both exits use the same explicit delay (no `when: 'afterChildren'` on the panel, which
+ * would wait for this drift too and run the two one after the other).
+ */
+export const menuContents: Variants = {
+  [HIDDEN]: { x: -MENU.overlayX },
+  [SHOWN]: { x: 0, transition: { duration: DURATION.overlayIn, ease: easeOut } },
+  [EXIT]: {
     x: MENU.overlayX,
-    transition: { duration: DURATION.overlayOut, ease: easeIn, when: 'afterChildren' },
+    transition: { duration: DURATION.overlayOut, ease: easeIn, delay: MENU_CONTENTS_OUT },
   },
 };
 

@@ -6,7 +6,7 @@ export function PropertyDetailSkeleton() {
     <div role="status">
       <span className="sr-only">Loading residence</span>
       <div aria-hidden="true">
-        <Skeleton className="min-h-[520px] md:min-h-[80vh]" />
+        <Skeleton className="aspect-[4/5] md:aspect-auto md:min-h-[80vh]" />
         <div className="page pt-12 pb-10 lg:w-3/5 lg:pt-24">
           <Skeleton className="h-2.5 w-24" />
           <Skeleton className="mt-5 h-6 w-full" />

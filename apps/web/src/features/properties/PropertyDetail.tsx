@@ -48,7 +48,8 @@ export function PropertyDetail({ id, inquiry }: PropertyDetailProps) {
     <>
       <title>{`${property.name} · White Lotus`}</title>
       <BackToResidences />
-      <PropertyHero property={property} />
+      {/* Keyed by id: opening another residence remounts it, so the title sequence plays again. */}
+      <PropertyHero key={property.id} property={property} />
 
       {/* Mobile: content, then a full-width band. Desktop: 60/40 columns, band sticky on the right. */}
       <div className="mx-auto max-w-[1200px] lg:grid lg:grid-cols-[3fr_2fr] lg:items-start lg:gap-16 lg:px-12 lg:py-24">

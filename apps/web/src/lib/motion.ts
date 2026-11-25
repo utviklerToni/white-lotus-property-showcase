@@ -16,6 +16,9 @@ export const DURATION = {
   lineOut: 0.42,
   driftIn: 0.65,
   driftOut: 0.4,
+  /** The detail page's longer title line, which the stats appear along. */
+  titleLineIn: 1.1,
+  statIn: 0.5,
 } as const;
 
 /** The gold line starts this long after its hero text. */
@@ -65,4 +68,31 @@ export const driftGroup: Variants = {
   [HIDDEN]: {},
   [SHOWN]: { transition: { delayChildren: stagger(STAGGER) } },
   [EXIT]: { transition: { delayChildren: stagger(STAGGER, { from: 'last' }) } },
+};
+
+/** Detail title line: a slower, full-width hero line (DURATION.titleLineIn). */
+export const titleLine: Variants = {
+  [HIDDEN]: { scaleX: 0, originX: 0 },
+  [SHOWN]: {
+    scaleX: 1,
+    originX: 0,
+    transition: { duration: DURATION.titleLineIn, ease: easeOut, delay: LINE_DELAY },
+  },
+};
+
+// Where along the title line each stat appears (share of its duration), as if the line reveals them.
+const STAT_MARKS = [0.15, 0.4, 0.65, 0.9];
+
+/** Detail stats: fade in and rise 8px, timed to the title line. `custom` is the stat's index. */
+export const statReveal: Variants = {
+  [HIDDEN]: { opacity: 0, y: 8 },
+  [SHOWN]: (index: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: DURATION.statIn,
+      ease: easeOut,
+      delay: LINE_DELAY + DURATION.titleLineIn * (STAT_MARKS[index] ?? 1),
+    },
+  }),
 };

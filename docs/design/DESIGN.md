@@ -107,7 +107,7 @@ Small caps 10px, padding 6px 10px, square. Available: champagne bg / navy text (
 - **No pills anywhere.**
 
 ### Detail page
-1. **Hero:** full-bleed photo, min-height 520px mobile / 80vh desktop, bottom scrim `rgba(22,25,38,.55)` minimum so white text passes 4.5:1. Status badge top-left. Centered: small caps line (`No. 04 · Indiranagar`, champagne) + title. Bottom edge: facts as a `<dl>` — label (small caps, `on-navy` colour) over value (white, 17px): Price, Bedrooms, Size, Location. 2×2 on mobile, 4 across on desktop, hairline above.
+1. **Hero:** full-bleed photo, 4:5 box on phones (grows only if the content needs it) / min-height 80vh from md. The photo is cropped by Unsplash to the box's shape (`<picture>`: 4:5 below md, 3:2 from md, `sizes="100vw"`), so `object-cover` barely scales it. A full-width gold line under the title (§5). bottom scrim `rgba(22,25,38,.55)` minimum so white text passes 4.5:1. Status badge top-left. Centered: small caps line (`No. 04 · Indiranagar`, champagne) + title. Bottom edge: facts as a `<dl>` — label (small caps, `on-navy` colour) over value (white, 17px): Price, Bedrooms, Size, Location. 2×2 on mobile, 4 across on desktop, hairline above.
 2. **Overview:** gold-text "Overview" label, then the short `description` as the lead (Jost 300, large, indented first line).
 3. **Specs:** hairline rows, label (slate small caps) left, value right: Status, Built-up area, Bedrooms, Neighbourhood.
 4. **Details:** the long `details` text as body copy.
@@ -138,6 +138,7 @@ Calm and slow, never bouncy. Library: `motion` (`LazyMotion` + `m` with `domAnim
 - **Level 2, drift** (everything else): opacity 0 → 1 and `x: -28px → 0`, 650ms, siblings 85ms apart. Exit: opacity 0 and `x: +28px`, 400ms, reverse stagger.
 - **Link line** (`link-draw` in `index.css`): gold 1px line draws left to right on hover/focus (600ms, enter curve), retracts to the right on leave (420ms, exit curve), stays drawn on `aria-current="page"`.
 - Still from before: image fade-in on load (300ms), slow zoom on card image hover (`scale-[1.03]`, 700ms), 200ms colour transitions on links and buttons.
+- **Detail title sequence:** the name enters with the Level 1 slide; a full-width gold line under the title block draws over 1100ms, 150ms after it; the four facts fade in and rise 8px (500ms) as the line's drawn tip reaches 15/40/65/90% of its length (delays solved from the `easeOut` curve: 188, 260, 358, 561ms). Once per mount (keyed by property id), instant under reduced motion.
 - Never animate the first property image or the detail hero image (LCP). Hero text starts on mount with no delay.
 - All of it instant under `prefers-reduced-motion: reduce` (MotionConfig for transforms, the global CSS rule for transitions).
 

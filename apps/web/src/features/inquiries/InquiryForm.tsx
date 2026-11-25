@@ -20,6 +20,15 @@ const EMPTY: InquiryInput = { name: '', email: '', phone: '', message: '' };
 
 const isFieldName = (key: string): key is FieldName => FIELDS.some((field) => field.name === key);
 
+/**
+ * Ref callback for the error message: focus it when it appears. Defined outside the component, so
+ * React calls it on mount only, not on every render. The message unmounts while a retry is
+ * pending, so each failed attempt focuses it again.
+ */
+function focusOnMount(node: HTMLElement | null) {
+  node?.focus();
+}
+
 // Light stone fill, no border, navy text (DESIGN.md §4 inquiry band).
 const INPUT = 'block min-h-11 w-full bg-stone p-3 text-sm font-light text-navy';
 
@@ -150,9 +159,12 @@ export function InquiryForm({ propertyId }: { propertyId: number }) {
           })}
 
           {mutation.isError && (
+            // Focus moves here (screen readers read it on focus; no role="alert" as well, which
+            // would read it twice). tabIndex -1: focusable from code, not a Tab stop.
             <p
-              role="alert"
-              className="flex items-start gap-2 text-[13px]/[1.5] text-on-navy-accent"
+              ref={focusOnMount}
+              tabIndex={-1}
+              className="flex items-start gap-2 text-[13px]/[1.5] text-on-navy-accent focus:outline-none"
             >
               <CircleAlert aria-hidden size={16} strokeWidth={1.5} className="mt-px shrink-0" />
               {formError(mutation.error)}

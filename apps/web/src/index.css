@@ -119,6 +119,13 @@
   .bg-navy :focus-visible {
     outline-color: var(--color-gold);
   }
+
+  /* A modal <dialog> doesn't stop the page behind it scrolling: lock it while one is open.
+     The stable gutter keeps the layout from shifting when the scrollbar goes. */
+  html:has(dialog[open]) {
+    overflow: hidden;
+    scrollbar-gutter: stable;
+  }
 }
 
 /* DESIGN.md §5: all motion off for people who ask for less. */

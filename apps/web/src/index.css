@@ -19,6 +19,8 @@
   --color-sand: #d9cfc2; /* image placeholder, skeleton */
   --color-on-navy: #e8dccb; /* labels on navy */
   --color-on-navy-accent: #e8c99a; /* small accent text on navy */
+  --color-espresso: #2b211c; /* mobile menu overlay; cream 13.3:1, gold 5.1:1 on it */
+  --color-cream: #f3ebdd; /* text on espresso */
 
   --font-serif: 'Cormorant Garamond', serif;
   --font-sans: 'Jost', sans-serif;
@@ -116,8 +118,26 @@
     outline-offset: 2px;
   }
 
-  .bg-navy :focus-visible {
+  .bg-navy :focus-visible,
+  .bg-espresso :focus-visible {
     outline-color: var(--color-gold);
+  }
+
+  /* Mobile menu (app/MobileMenu.tsx): while it is open or leaving, the page behind dims and
+     stops scrolling. #root fades down with the overlay and back up once it has gone. */
+  #root {
+    transition: opacity 450ms var(--ease-enter);
+  }
+
+  /* No stable gutter here (unlike dialogs): the overlay covers the page, so a shift behind it
+     can't be seen, and a gutter would leave a strip of page beside it. */
+  html[data-menu] {
+    overflow: hidden;
+  }
+
+  html[data-menu] #root {
+    opacity: 0.35;
+    transition-duration: 600ms;
   }
 
   /* A modal <dialog> doesn't stop the page behind it scrolling: lock it while one is open.

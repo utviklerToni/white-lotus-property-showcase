@@ -27,6 +27,8 @@ Copy values from the mocks. Where this brief and a mock disagree, ask.
   --color-sand: #D9CFC2;          /* image placeholder / skeleton */
   --color-on-navy: #E8DCCB;       /* labels on navy (10:1) */
   --color-on-navy-accent: #E8C99A;/* small accent text on navy */
+  --color-espresso: #2B211C;      /* mobile menu overlay (cream 13.3:1, gold 5.1:1 on it) */
+  --color-cream: #F3EBDD;         /* text on espresso */
 
   --font-serif: "Cormorant Garamond", serif;   /* 400, 500, 600 (wordmark only) */
   --font-sans: "Jost", sans-serif;             /* 300, 400, 500 */
@@ -74,7 +76,10 @@ Cormorant is thin: always 500 for headings and names, explicit navy colour.
 ## 4. Components
 
 ### Header
-Sticky on all sizes with a solid stone background (the page colour, no transparency or blur); the hairline bottom border fades in once the page has scrolled. Left: text wordmark in Cormorant 600, monogram "WL" below md, "White Lotus" from md. Right: inline nav links on all sizes, no menu button (sans, small caps, 44px tap target, the active link keeps its gold line drawn, §5). No logo image. 80px tall; `html` has `scroll-padding-top: 5rem` and sticky columns use `top-28` so nothing hides under it.
+Sticky on all sizes with a solid stone background (the page colour, no transparency or blur); the hairline bottom border fades in once the page has scrolled. Left: text wordmark in Cormorant 600, monogram "WL" below md, "White Lotus" from md. Right, from md: inline nav links (sans, small caps, 44px tap target, the active link keeps its gold line drawn, §5). Below md: a "MENU" button (small caps, letter-spaced, with a two-line icon) that opens the menu overlay; the nav links are hidden. No logo image. 80px tall; `html` has `scroll-padding-top: 5rem` and sticky columns use `top-28` so nothing hides under it.
+
+### Mobile menu (below md)
+Full-screen overlay, espresso background, cream text, gold accents. Top row matches the header: "White Lotus" wordmark (Cormorant 600) left, "CLOSE" with the icon turned into an X right, where "MENU" was. Middle: the nav items in Cormorant 500 at 36px, each with a small gold number (`01 Residences`, `02 Admin`) and a gold hairline under it; the current page's hairline is full gold, the others at 35%. Bottom: a 40px gold rule and "BENGALURU" in small caps. Rendered outside `#root`, which is made inert and dimmed to 35% with page scroll locked while it is open; focus moves to Close, Tab wraps inside, Escape closes, focus returns to "MENU". Any navigation closes it, and so does widening past md.
 
 ### Listings intro
 Small gold-text caps line ("Residences · Bengaluru"), Cormorant headline, one short Jost 300 paragraph. Our own copy, never White Lotus's text.
@@ -139,6 +144,7 @@ Calm and slow, never bouncy. Library: `motion` (`LazyMotion` + `m` with `domAnim
 - **Link line** (`link-draw` in `index.css`): gold 1px line draws left to right on hover/focus (600ms, enter curve), retracts to the right on leave (420ms, exit curve), stays drawn on `aria-current="page"`.
 - Still from before: image fade-in on load (300ms), slow zoom on card image hover (`scale-[1.03]`, 700ms), 200ms colour transitions on links and buttons.
 - **Detail title sequence:** the name enters with the Level 1 slide; a full-width gold line under the title block draws over 1100ms, 150ms after it; the four facts fade in and rise 8px (500ms) as the line's drawn tip reaches 15/40/65/90% of its length (delays solved from the `easeOut` curve: 188, 260, 358, 561ms). Once per mount (keyed by property id), instant under reduced motion.
+- **Mobile menu:** open: the page dims to 35% (600ms) while the overlay fades in drifting from `x: -24px` (600ms); the wordmark slides in (Level 1, 120ms delay); items drift in from 260ms, 90ms apart; each hairline draws 350ms after its item starts; then the foot rule and "BENGALURU" (from 750ms, 150ms apart). The icon's lines meet and turn into an X. Close: items leave to the right last-first with their hairlines retracting, the wordmark slides out to the right, then the overlay fades out drifting `+24px` (450ms) and the page fades back up. Children timed by a parent never set their own `delay` (Motion lets it replace the parent's).
 - Never animate the first property image or the detail hero image (LCP). Hero text starts on mount with no delay.
 - All of it instant under `prefers-reduced-motion: reduce` (MotionConfig for transforms, the global CSS rule for transitions).
 

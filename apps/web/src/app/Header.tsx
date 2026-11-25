@@ -8,14 +8,14 @@ const NAV = [
   { to: '/admin', label: 'Admin' },
 ];
 
-// Sticky on all sizes, translucent stone with a blur. The hairline appears once the page scrolls.
+// Sticky on all sizes, solid stone like the page. The hairline appears once the page scrolls.
 export function Header() {
   const scrolled = useHasScrolled();
 
   return (
     <header
       className={cn(
-        'sticky top-0 z-40 border-b-[0.5px] bg-stone/85 backdrop-blur-md',
+        'sticky top-0 z-40 border-b-[0.5px] bg-stone',
         'transition-colors duration-300 ease-enter',
         scrolled ? 'border-navy/20' : 'border-transparent',
       )}

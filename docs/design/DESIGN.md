@@ -74,7 +74,7 @@ Cormorant is thin: always 500 for headings and names, explicit navy colour.
 ## 4. Components
 
 ### Header
-Sticky on all sizes: stone at 85% with a backdrop blur; the hairline bottom border fades in once the page has scrolled. Left: text wordmark in Cormorant 600, monogram "WL" below md, "White Lotus" from md. Right: inline nav links on all sizes, no menu button (sans, small caps, 44px tap target, the active link keeps its gold line drawn, §5). No logo image. 80px tall; `html` has `scroll-padding-top: 5rem` and sticky columns use `top-28` so nothing hides under it.
+Sticky on all sizes with a solid stone background (the page colour, no transparency or blur); the hairline bottom border fades in once the page has scrolled. Left: text wordmark in Cormorant 600, monogram "WL" below md, "White Lotus" from md. Right: inline nav links on all sizes, no menu button (sans, small caps, 44px tap target, the active link keeps its gold line drawn, §5). No logo image. 80px tall; `html` has `scroll-padding-top: 5rem` and sticky columns use `top-28` so nothing hides under it.
 
 ### Listings intro
 Small gold-text caps line ("Residences · Bengaluru"), Cormorant headline, one short Jost 300 paragraph. Our own copy, never White Lotus's text.

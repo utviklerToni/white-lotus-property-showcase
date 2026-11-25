@@ -34,12 +34,12 @@ export function AdminLayout() {
                   className={({ isActive }) =>
                     cn(
                       'caps flex min-h-11 items-center text-[11px] text-slate transition-colors duration-200 hover:text-navy',
-                      'decoration-gold decoration-1 underline-offset-[6px]',
-                      isActive && 'text-navy underline',
+                      isActive && 'text-navy',
                     )
                   }
                 >
-                  {item.label}
+                  {/* aria-current="page" on the active link keeps the gold line drawn. */}
+                  <span className="link-draw">{item.label}</span>
                 </NavLink>
               </li>
             ))}

@@ -8,7 +8,7 @@ export function Layout() {
       {/* Hidden until focused: first Tab stop, jumps past the header. */}
       <a
         href="#main"
-        className="caps sr-only bg-navy px-4 py-3 text-[11px] text-stone focus:not-sr-only focus:absolute focus:top-2 focus:left-2"
+        className="caps sr-only bg-navy px-4 py-3 text-[11px] text-stone focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50"
       >
         Skip to content
       </a>

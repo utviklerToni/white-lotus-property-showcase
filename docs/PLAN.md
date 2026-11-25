@@ -221,7 +221,7 @@ Visual design for every page: **`docs/design/DESIGN.md`** and its mocks. This se
 **`/` — Properties**
 
 - Header and footer per DESIGN.md (text wordmark, inline links from md, a Menu button and full-screen menu below md; D112 supersedes D50).
-- Listings intro, then a filter bar: location (dropdown from `/api/locations`), min bedrooms (Any / 3+ / 4+ / 5+), status, sort. Every filter has a visible label.
+- Listings intro, then a filter bar: location (dropdown from `/api/locations`), min bedrooms (Any / 3+ / 4+ / 5+), status, sort. Every filter has a visible label. Below md the selects are replaced by a floating "Filters" pill that grows into a card of radio groups (same options, same URL params; DESIGN.md §4).
 - **Filters stored in the URL query string**, so results can be shared and survive refresh.
 - Responsive grid: 1 col mobile, 2 tablet, 3 desktop. Dimmed (`opacity-60`, `aria-busy`) while refetching.
 - Card: image, status badge, `No. 04` (zero-padded id), location, name, beds, size, `₹6.5 Cr`. Whole card is one link.

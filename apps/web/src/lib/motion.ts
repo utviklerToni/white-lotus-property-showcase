@@ -1,4 +1,4 @@
-import { stagger, type Variants } from 'motion/react';
+import { stagger, type Transition, type Variants } from 'motion/react';
 
 // The motion system (DESIGN.md §5). Animated components take curves, durations and variants
 // from here, never their own values. index.css mirrors the two curves as --ease-enter/--ease-exit.
@@ -23,6 +23,8 @@ export const DURATION = {
   overlayOut: 0.45,
   iconIn: 0.45,
   iconOut: 0.35,
+  /** The filter pill growing into its card and back (shared layoutId). */
+  morph: 0.45,
 } as const;
 
 /** The gold line starts this long after its hero text. */
@@ -230,4 +232,40 @@ export const menuIconLine: Variants = {
     transition: { duration: DURATION.iconIn, ease: easeOut },
   }),
   [EXIT]: { y: 0, rotate: 0, transition: { duration: DURATION.iconOut, ease: easeIn } },
+};
+
+// Mobile filter sheet (DESIGN.md §5): the pill grows into the card, then the card's sections
+// drift in. Closing shrinks the card back into the pill.
+
+/** The pill-to-card morph (a layout animation, so it needs domMax: see lib/motionMax.ts). */
+export const MORPH: Transition = { duration: DURATION.morph, ease: easeOut };
+
+/** Card sections: Level 2 drift, starting once the morph has nearly settled. */
+export const sheetContents: Variants = {
+  [HIDDEN]: {},
+  [SHOWN]: {
+    transition: { delayChildren: stagger(STAGGER, { startDelay: DURATION.morph * 0.6 }) },
+  },
+};
+
+/** The card's collapse chevron: turns from pointing up (the pill's) to pointing down. */
+export const sheetChevron: Variants = {
+  [HIDDEN]: { rotate: 0 },
+  [SHOWN]: { rotate: 180, transition: MORPH },
+};
+
+/** The pill's label after a close: fades in as the card finishes shrinking into it. */
+export const pillLabel: Variants = {
+  [HIDDEN]: { opacity: 0 },
+  [SHOWN]: {
+    opacity: 1,
+    transition: { duration: 0.3, ease: easeOut, delay: DURATION.morph * 0.6 },
+  },
+};
+
+/** The dimmed backdrop behind the card. */
+export const sheetBackdrop: Variants = {
+  [HIDDEN]: { opacity: 0 },
+  [SHOWN]: { opacity: 1, transition: { duration: DURATION.morph, ease: easeOut } },
+  [EXIT]: { opacity: 0, transition: { duration: DURATION.morph, ease: easeIn } },
 };

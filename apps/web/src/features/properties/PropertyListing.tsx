@@ -5,6 +5,7 @@ import { ErrorState } from '../../components/ui/ErrorState';
 import { cn } from '../../lib/cn';
 import { useProperties } from './api';
 import { FilterBar } from './FilterBar';
+import { FilterSheet } from './FilterSheet';
 import { filtersToParams, readFilters } from './filters';
 import { readRestoreScrollY } from './listingReturn';
 import { PropertyCard } from './PropertyCard';
@@ -31,10 +32,16 @@ export function PropertyListing() {
   return (
     <>
       <FilterBar filters={filters} count={isError ? undefined : data?.length} />
+      {/* Below md: the floating Filters pill and its card. */}
+      <FilterSheet filters={filters} />
 
       {/* Min height of about one card row: going from a few results to none doesn't shrink the
-          page, so the browser never clamps the scroll position upward. */}
-      <section aria-label="Residences" className="page mt-7 min-h-[440px] md:mt-10 md:min-h-[60vh]">
+          page, so the browser never clamps the scroll position upward. Below md, bottom padding
+          keeps the last card clear of the floating Filters pill. */}
+      <section
+        aria-label="Residences"
+        className="page mt-7 min-h-[440px] max-md:pb-24 md:mt-10 md:min-h-[60vh]"
+      >
         {isPending ? (
           <div role="status" className={GRID}>
             <span className="sr-only">Loading residences</span>

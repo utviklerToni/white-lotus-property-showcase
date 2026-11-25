@@ -247,7 +247,7 @@ export function PropertyForm({ property }: { property?: Property }) {
 
       <section
         aria-label="Image preview"
-        className="w-full max-w-md lg:sticky lg:top-8 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:max-w-none"
+        className="w-full max-w-md lg:sticky lg:top-28 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:max-w-none"
       >
         <p aria-hidden className="caps mb-2 text-[10px] text-slate">
           Image preview

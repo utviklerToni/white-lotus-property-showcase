@@ -28,8 +28,12 @@ Copy values from the mocks. Where this brief and a mock disagree, ask.
   --color-on-navy: #E8DCCB;       /* labels on navy (10:1) */
   --color-on-navy-accent: #E8C99A;/* small accent text on navy */
 
-  --font-serif: "Cormorant Garamond", serif;   /* 400, 500 */
+  --font-serif: "Cormorant Garamond", serif;   /* 400, 500, 600 (wordmark only) */
   --font-sans: "Jost", sans-serif;             /* 300, 400, 500 */
+
+  /* motion curves, same values as src/lib/motion.ts (§5) */
+  --ease-enter: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-exit: cubic-bezier(0.64, 0, 0.78, 0);
 }
 ```
 
@@ -42,6 +46,7 @@ Load fonts in `index.html` with `preconnect` + `display=swap`, only the weights 
 
 | Role | Font | Mobile | Desktop | Notes |
 |---|---|---|---|---|
+| Wordmark (header) | Cormorant 600 | "WL" 24px | "White Lotus" 22px | The only 600 |
 | Page headline (listings intro) | Cormorant 500 | 40px / 1.05 | 64px | Upright, never italic |
 | Detail title (hero) | Cormorant 500 | 48px / 1.0 | 80px | Centered on the hero |
 | Card name | Cormorant 500 | 28px | 30px | |
@@ -69,7 +74,7 @@ Cormorant is thin: always 500 for headings and names, explicit navy colour.
 ## 4. Components
 
 ### Header
-Stone background, hairline bottom border. Left: text wordmark "WHITE LOTUS" in small caps (Jost 500). Right: inline nav links on all sizes, no menu button (sans, small caps, 44px tap target, active link has a gold underline). No logo image.
+Sticky on all sizes: stone at 85% with a backdrop blur; the hairline bottom border fades in once the page has scrolled. Left: text wordmark in Cormorant 600, monogram "WL" below md, "White Lotus" from md. Right: inline nav links on all sizes, no menu button (sans, small caps, 44px tap target, the active link keeps its gold line drawn, §5). No logo image. 80px tall; `html` has `scroll-padding-top: 5rem` and sticky columns use `top-28` so nothing hides under it.
 
 ### Listings intro
 Small gold-text caps line ("Residences · Bengaluru"), Cormorant headline, one short Jost 300 paragraph. Our own copy, never White Lotus's text.
@@ -98,6 +103,7 @@ Small caps 10px, padding 6px 10px, square. Available: champagne bg / navy text (
 - On navy: champagne fill, navy text.
 - Secondary: transparent, 1px navy outline (admin only).
 - Text links: underline (1px, offset 3–4px), never a button style.
+- Links whose gold line shows only on hover or when active (header nav, admin sub-nav, "← All residences", the card's "View residence") use `link-draw` (§5). Always-underlined text links stay as they are.
 - **No pills anywhere.**
 
 ### Detail page
@@ -125,7 +131,15 @@ Same tokens and fonts, denser and plainer: stone background, white table rows se
 ---
 
 ## 5. Motion
-Only: image fade-in on load (300ms), slow zoom on card image hover (`scale-[1.03]`, 700ms), 200ms colour transitions on links and buttons. All disabled under `prefers-reduced-motion`.
+Calm and slow, never bouncy. Library: `motion` (`LazyMotion` + `m` with `domAnimation`, `MotionConfig reducedMotion="user"`). Curves, durations and variants live in `src/lib/motion.ts`; components never use their own values. Only `transform` and `opacity` animate.
+
+- **Curves:** entrances `easeOut` `[0.22, 1, 0.36, 1]`, exits `easeIn` `[0.64, 0, 0.78, 0]`. Entrances are slower than exits.
+- **Level 1, hero slide** (hero moments only: the mobile home headline, the detail title, the menu wordmark): text in an `overflow: hidden` mask slides `x: -105% → 0`, 850ms; a gold line under it draws `scaleX 0 → 1` from the left, 900ms, 150ms after the text. Exit: text to `x: 105%`, 420ms; the line retracts to the right.
+- **Level 2, drift** (everything else): opacity 0 → 1 and `x: -28px → 0`, 650ms, siblings 85ms apart. Exit: opacity 0 and `x: +28px`, 400ms, reverse stagger.
+- **Link line** (`link-draw` in `index.css`): gold 1px line draws left to right on hover/focus (600ms, enter curve), retracts to the right on leave (420ms, exit curve), stays drawn on `aria-current="page"`.
+- Still from before: image fade-in on load (300ms), slow zoom on card image hover (`scale-[1.03]`, 700ms), 200ms colour transitions on links and buttons.
+- Never animate the first property image or the detail hero image (LCP). Hero text starts on mount with no delay.
+- All of it instant under `prefers-reduced-motion: reduce` (MotionConfig for transforms, the global CSS rule for transitions).
 
 ---
 
@@ -144,5 +158,5 @@ Only: image fade-in on load (300ms), slow zoom on card image hover (`scale-[1.03
 
 ## 7. Don't
 - Don't copy White Lotus's layout, text, logo, italic serif style, pills or `|` facts rows.
-- No gradients (except the hero scrim), no shadows, no rounded corners, no emoji, no entrance animations.
+- No gradients (except the hero scrim), no shadows, no rounded corners, no emoji, no entrance animations beyond §5.
 - No borders on inputs, except the filter selects' 1px bottom border (§4). No more colour than the palette above.

@@ -22,6 +22,10 @@
 
   --font-serif: 'Cormorant Garamond', serif;
   --font-sans: 'Jost', sans-serif;
+
+  /* Motion curves, same values as easeOut / easeIn in src/lib/motion.ts (DESIGN.md §5). */
+  --ease-enter: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-exit: cubic-bezier(0.64, 0, 0.78, 0);
 }
 
 /* Small-caps label: pair with a size (text-[10px] / text-[11px]). Short labels only. */
@@ -55,8 +59,47 @@
   @apply underline decoration-1 underline-offset-4 transition-colors duration-200;
 }
 
+/* Gold line under a link label that draws in left to right on hover or keyboard focus and
+   retracts to the right on leave; stays drawn on the current page's nav link. Put it on the label
+   <span> inside the link, so the line sits under the text, not under the 44px tap target. */
+@utility link-draw {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: -0.35em;
+    height: 1px;
+    background-color: var(--color-gold);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 420ms var(--ease-exit);
+  }
+
+  :where(a:hover, a:focus-visible, a[aria-current='page']) &::after {
+    transform: scaleX(1);
+    transform-origin: left;
+    transition: transform 600ms var(--ease-enter);
+  }
+}
+
+/* With link-draw: a resting line in the text colour under the gold one ("View residence"). */
+@utility link-draw-track {
+  &::before {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: -0.35em;
+    height: 1px;
+    background-color: currentColor;
+  }
+}
+
 @layer base {
   html {
+    /* The sticky header is 80px tall: anchor and focus jumps land below it. */
+    scroll-padding-top: 5rem;
     background-color: var(--color-stone);
     color: var(--color-navy);
   }

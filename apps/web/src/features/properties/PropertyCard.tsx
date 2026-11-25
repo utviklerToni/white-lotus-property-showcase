@@ -93,8 +93,8 @@ export function PropertyCard({ property }: { property: Property }) {
       </div>
 
       <p className="mt-3.5 text-[13px] text-navy">
-        <span className="text-link group-hover:decoration-gold">View residence</span>{' '}
-        <span aria-hidden>→</span>
+        {/* Navy line at rest; hovering or focusing the card draws the gold one over it. */}
+        <span className="link-draw link-draw-track">View residence</span> <span aria-hidden>→</span>
       </p>
     </Link>
   );

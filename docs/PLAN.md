@@ -27,7 +27,7 @@ Use current stable versions of everything, but prefer a major version released 6
 **Dependency allowlist.** Anything not listed here needs approval first.
 
 - api: `express`, `pg`, `zod`, `cors`, `helmet`, `express-rate-limit`, `tsx`
-- web: `react`, `react-dom`, `react-router` (pinned `^7`; import from `react-router`, not `react-router-dom`), `@tanstack/react-query`, `axios` (the one HTTP client in `src/lib/apiClient.ts`; interceptors for the admin key and 401 handling in Phase 6), `react-hook-form`, `@hookform/resolvers`, `lucide-react`, `sonner` (toasts), `@tanstack/react-table` (pinned `^8`; headless tables for admin: sorting, filter, search, pagination; lazy-loaded with admin), `tailwindcss`, `@tailwindcss/vite`, `clsx` + `tailwind-merge` (used only through the one `cn()` helper in `src/lib/cn.ts`)
+- web: `react`, `react-dom`, `react-router` (pinned `^7`; import from `react-router`, not `react-router-dom`), `@tanstack/react-query`, `axios` (the one HTTP client in `src/lib/apiClient.ts`; interceptors for the admin key and 401 handling in Phase 6), `react-hook-form`, `@hookform/resolvers`, `lucide-react`, `sonner` (toasts), `@tanstack/react-table` (pinned `^8`; headless tables for admin: sorting, filter, search, pagination; lazy-loaded with admin), `tailwindcss`, `@tailwindcss/vite`, `clsx` + `tailwind-merge` (used only through the one `cn()` helper in `src/lib/cn.ts`), `motion` (pinned `^12`; `LazyMotion` + `m` only, see DESIGN.md §5)
 - shared: `zod`
 - dev: `typescript`, `vitest`, `supertest`, `concurrently`, `vite`, `@vitejs/plugin-react`, `@types/*`, `eslint`, `@eslint/js`, `typescript-eslint`, `eslint-plugin-react-hooks`, `globals`, `prettier`, `eslint-config-prettier`
 
@@ -376,4 +376,4 @@ Then be honest and specific: what Claude Code generated, what you changed and wh
 
 ## 12. Out of scope (say so in README)
 
-Real login / user accounts / roles, image upload, pagination, multiple images per property, deployment, CI, frontend tests, entrance animations, i18n.
+Real login / user accounts / roles, image upload, pagination, multiple images per property, deployment, CI, frontend tests, entrance animations beyond DESIGN.md §5, i18n.

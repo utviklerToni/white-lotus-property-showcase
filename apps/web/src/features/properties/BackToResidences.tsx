@@ -14,9 +14,9 @@ export function BackToResidences() {
       <Link
         to={{ pathname: '/', search: from?.listingSearch ?? '' }}
         state={state}
-        className="caps inline-flex min-h-11 items-center gap-2 text-[11px] font-normal text-navy decoration-gold decoration-1 underline-offset-[6px] transition-colors duration-200 hover:underline"
+        className="caps inline-flex min-h-11 items-center gap-2 text-[11px] font-normal text-navy"
       >
-        <span aria-hidden>←</span> All residences
+        <span aria-hidden>←</span> <span className="link-draw">All residences</span>
       </Link>
     </div>
   );

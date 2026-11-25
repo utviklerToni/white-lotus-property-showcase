@@ -83,7 +83,7 @@ Record the outcome under Deviations or Failures in PROGRESS.md.
 - Tests run against `white_lotus_test` only, never the dev database.
 - Never commit while a planted bug is in the code. All tests green before every commit.
 - TypeScript strict. No `any` and no `eslint-disable` without a same-line comment explaining why.
-- Build only what the brief asks for plus what PLAN.md lists. No CI, no deployment, no frontend tests, no real login. No entrance animations; only the motion in DESIGN.md §5.
+- Build only what the brief asks for plus what PLAN.md lists. No CI, no deployment, no frontend tests, no real login. Only the motion in DESIGN.md §5 (no other entrance animations).
 - Validation lives in `packages/shared` (Zod) and is used by both web and api. DB CHECK constraints stay as the last line of defence.
 - One error response shape everywhere: `{ error, fields? }`. No stack traces in responses.
 - No `window.alert` / `window.confirm` / `window.prompt`. Use React modals and toasts.

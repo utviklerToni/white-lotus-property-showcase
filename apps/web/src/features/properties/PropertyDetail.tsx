@@ -68,7 +68,7 @@ export function PropertyDetail({ id, inquiry }: PropertyDetailProps) {
 
         <section
           aria-labelledby={headingId}
-          className="bg-navy px-6 py-10 md:px-12 lg:sticky lg:top-8 lg:px-10"
+          className="bg-navy px-6 py-10 md:px-12 lg:sticky lg:top-28 lg:px-10"
         >
           {/* The 0.5px gold frame is the only border on the page besides hairlines. */}
           <div className="border-[0.5px] border-gold px-[22px] py-7 md:p-9">

@@ -220,7 +220,7 @@ Visual design for every page: **`docs/design/DESIGN.md`** and its mocks. This se
 
 **`/` — Properties**
 
-- Header and footer per DESIGN.md (text wordmark, inline links on all sizes, no menu button).
+- Header and footer per DESIGN.md (text wordmark, inline links from md, a Menu button and full-screen menu below md; D112 supersedes D50).
 - Listings intro, then a filter bar: location (dropdown from `/api/locations`), min bedrooms (Any / 3+ / 4+ / 5+), status, sort. Every filter has a visible label.
 - **Filters stored in the URL query string**, so results can be shared and survive refresh.
 - Responsive grid: 1 col mobile, 2 tablet, 3 desktop. Dimmed (`opacity-60`, `aria-busy`) while refetching.

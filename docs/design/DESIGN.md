@@ -138,7 +138,7 @@ Calm and slow, never bouncy. Library: `motion` (`LazyMotion` + `m` with `domAnim
 - **Level 2, drift** (everything else): opacity 0 → 1 and `x: -28px → 0`, 650ms, siblings 85ms apart. Exit: opacity 0 and `x: +28px`, 400ms, reverse stagger.
 - **Link line** (`link-draw` in `index.css`): gold 1px line draws left to right on hover/focus (600ms, enter curve), retracts to the right on leave (420ms, exit curve), stays drawn on `aria-current="page"`.
 - Still from before: image fade-in on load (300ms), slow zoom on card image hover (`scale-[1.03]`, 700ms), 200ms colour transitions on links and buttons.
-- **Detail title sequence:** the name enters with the Level 1 slide; a full-width gold line under the title block draws over 1100ms, 150ms after it; the four facts fade in and rise 8px (500ms) at 15/40/65/90% of the line's duration. Once per mount (keyed by property id), instant under reduced motion.
+- **Detail title sequence:** the name enters with the Level 1 slide; a full-width gold line under the title block draws over 1100ms, 150ms after it; the four facts fade in and rise 8px (500ms) as the line's drawn tip reaches 15/40/65/90% of its length (delays solved from the `easeOut` curve: 188, 260, 358, 561ms). Once per mount (keyed by property id), instant under reduced motion.
 - Never animate the first property image or the detail hero image (LCP). Hero text starts on mount with no delay.
 - All of it instant under `prefers-reduced-motion: reduce` (MotionConfig for transforms, the global CSS rule for transitions).
 

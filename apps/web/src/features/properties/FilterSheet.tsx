@@ -142,7 +142,7 @@ export function FilterSheet({ filters }: { filters: PropertyListQuery }) {
             }}
             // borderRadius in style, so Motion keeps the corners round while it scales the card.
             style={{ borderRadius: 20 }}
-            className="pointer-events-auto flex w-[280px] max-w-full flex-col overflow-hidden bg-espresso/95 text-cream backdrop-blur-md"
+            className="pointer-events-auto flex w-[240px] max-w-full flex-col overflow-hidden bg-espresso/95 text-cream backdrop-blur-md"
           >
             <div className="flex items-center justify-between py-2 pr-2 pl-5">
               <h2 id={titleId} className="text-[13px]">
@@ -157,27 +157,31 @@ export function FilterSheet({ filters }: { filters: PropertyListQuery }) {
               >
                 <m.span
                   variants={sheetChevron}
-                  className="grid size-8 place-items-center rounded-full border border-cream/30"
+                  className="grid size-7 place-items-center rounded-full border border-cream/30"
                 >
-                  <ChevronUp aria-hidden size={14} strokeWidth={1.5} />
+                  <ChevronUp aria-hidden size={13} strokeWidth={1.5} />
                 </m.span>
               </button>
             </div>
 
             {/* Scrolls inside past 60vh. relative: the sr-only radios are positioned against it,
                 so they can't escape and widen anything; overflow-x-hidden: the drift never shows
-                a sideways scrollbar (the menu's lesson, F21). */}
+                a sideways scrollbar (the menu's lesson, F21). Right side: 14px padding plus a
+                stable scrollbar gutter (0 on phones, 6px with desktop scrollbars), so the inset
+                stays about 20px with either kind of scrollbar. */}
             <m.div
               variants={sheetContents}
-              className="sheet-scroll relative max-h-[60vh] overflow-x-hidden overflow-y-auto px-5 pb-2"
+              className="sheet-scroll relative max-h-[60vh] overflow-x-hidden overflow-y-auto pr-3.5 pb-2 pl-5"
             >
               {groups.map((group) => (
                 <m.fieldset key={group.key} variants={drift} className="pt-3 pb-1">
                   <legend className="caps pt-3 text-[10px] text-cream/65">{group.label}</legend>
                   {group.options.map((option) => (
+                    // 36px rows, the whole row is the tap target: denser than the 44px used
+                    // elsewhere, still above WCAG 2.2 AA's 24px minimum (DESIGN.md §6).
                     <label
                       key={option.value}
-                      className="flex min-h-11 cursor-pointer items-center gap-3 text-sm"
+                      className="flex min-h-9 cursor-pointer items-center gap-3 text-sm"
                     >
                       <input
                         type="radio"

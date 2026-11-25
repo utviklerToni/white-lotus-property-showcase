@@ -30,8 +30,10 @@
   --ease-exit: cubic-bezier(0.64, 0, 0.78, 0);
 }
 
-/* The filter card's scroll area: a thin cream scrollbar instead of the default white track. */
+/* The filter card's scroll area: a thin cream scrollbar instead of the default white track, in a
+   reserved gutter (no width at all where scrollbars overlay the content, as on phones). */
 @utility sheet-scroll {
+  scrollbar-gutter: stable;
   scrollbar-width: thin;
   scrollbar-color: color-mix(in srgb, var(--color-cream) 30%, transparent) transparent;
 }

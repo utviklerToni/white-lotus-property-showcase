@@ -1,8 +1,9 @@
-import { useEffect, useRef, type KeyboardEvent, type RefObject } from 'react';
+import { useEffect, useRef, type RefObject } from 'react';
 import { createPortal } from 'react-dom';
 import { NavLink } from 'react-router';
 import { AnimatePresence, m, useReducedMotion } from 'motion/react';
 import { cn } from '../lib/cn';
+import { wrapFocus } from '../lib/focusTrap';
 import {
   EXIT,
   HIDDEN,
@@ -76,7 +77,7 @@ export function MobileMenu({ open, id, onClose, onExited, triggerRef }: MobileMe
           // Focus is always in the menu (the page is inert), so its keys are caught here.
           onKeyDown={(event) => {
             if (event.key === 'Escape') onClose();
-            if (event.key === 'Tab') wrapFocus(event);
+            wrapFocus(event);
           }}
           // The panel: always full screen, it only fades (menuOverlay). The contents drift.
           // overflow-x-hidden: with overflow-y auto the panel also scrolls sideways, and the
@@ -164,23 +165,6 @@ export function MobileMenu({ open, id, onClose, onExited, triggerRef }: MobileMe
     </AnimatePresence>,
     document.body,
   );
-}
-
-/**
- * Focus trap: Tab from the last control goes to the first, Shift+Tab from the first to the last.
- * The inert page already keeps focus off it; this also keeps it out of the browser's own UI.
- */
-function wrapFocus(event: KeyboardEvent<HTMLElement>) {
-  const controls = event.currentTarget.querySelectorAll<HTMLElement>('a[href], button');
-  const first = controls[0];
-  const last = controls[controls.length - 1];
-  if (event.shiftKey && document.activeElement === first) {
-    event.preventDefault();
-    last?.focus();
-  } else if (!event.shiftKey && document.activeElement === last) {
-    event.preventDefault();
-    first?.focus();
-  }
 }
 
 /**

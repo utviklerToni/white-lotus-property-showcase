@@ -30,6 +30,12 @@
   --ease-exit: cubic-bezier(0.64, 0, 0.78, 0);
 }
 
+/* The filter card's scroll area: a thin cream scrollbar instead of the default white track. */
+@utility sheet-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--color-cream) 30%, transparent) transparent;
+}
+
 /* Small-caps label: pair with a size (text-[10px] / text-[11px]). Short labels only. */
 @utility caps {
   text-transform: uppercase;
@@ -127,6 +133,17 @@
      stops scrolling. #root fades down with the overlay and back up once it has gone. */
   #root {
     transition: opacity 450ms var(--ease-enter);
+  }
+
+  /* Mobile filter sheet (FilterSheet.tsx): the page stays visible behind its backdrop. Instead of
+     a reserved gutter (a light strip the fixed backdrop can't cover), the body is padded by the
+     scrollbar's width, measured on open (0 with overlay scrollbars, as on phones). */
+  html[data-sheet] {
+    overflow: hidden;
+  }
+
+  html[data-sheet] body {
+    padding-right: var(--scrollbar-gap, 0px);
   }
 
   /* No stable gutter here (unlike dialogs): the overlay covers the page, so a shift behind it

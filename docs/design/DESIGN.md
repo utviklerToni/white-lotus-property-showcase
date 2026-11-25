@@ -27,7 +27,7 @@ Copy values from the mocks. Where this brief and a mock disagree, ask.
   --color-sand: #D9CFC2;          /* image placeholder / skeleton */
   --color-on-navy: #E8DCCB;       /* labels on navy (10:1) */
   --color-on-navy-accent: #E8C99A;/* small accent text on navy */
-  --color-espresso: #2B211C;      /* mobile menu overlay (cream 13.3:1, gold 5.1:1 on it) */
+  --color-espresso: #2B211C;      /* mobile menu, filter sheet, footer (cream 13.3:1, gold 5.1:1, cream 65% 6.4:1 on it) */
   --color-cream: #F3EBDD;         /* text on espresso */
 
   --font-serif: "Cormorant Garamond", serif;   /* 400, 500, 600 (wordmark only) */
@@ -128,7 +128,12 @@ Small caps 10px, padding 6px 10px, square. Available: champagne bg / navy text (
 6. Desktop: below the hero, two columns: overview + specs + details left (~60%), inquiry band as a sticky panel right (~40%).
 
 ### Footer
-Stone, hairline top. Small caps: "White Lotus · Bengaluru" (slate) left, "Since 2014" (gold-text) right.
+Espresso on every page, cream text, gold accents, 64px above it (96px from md).
+- **CTA:** "Considering a residence?" in Cormorant 500 (32px, 48px from md) with "Let’s talk" in gold on its own line, and a gold arrow-in-circle (48px, 56px from md) that fills gold on hover/focus. The whole block is one link to the residences list (`/`).
+- A full-width gold hairline.
+- Nav: "Residences", "Admin" (small caps, cream, `link-draw`, 44px tap targets; the current page's line stays drawn). Then "BENGALURU" (small caps, cream 65%). No address, phone or email: none are given, and none are invented.
+- "© {current year} White Lotus" (small caps 10px, cream 65%). No newsletter.
+- Mobile: one column, in that order; bottom padding 96px plus the safe area, so the listing's Filters pill never covers the copyright. From md: CTA left, nav and city right (aligned to its bottom), then the hairline and the copyright across the full width.
 
 ### States
 - Loading: card skeletons in sand (photo block + three bars), same layout as the card.
@@ -152,6 +157,7 @@ Calm and slow, never bouncy. Library: `motion` (`LazyMotion` + `m` with `domAnim
 - **Detail title sequence:** the name enters with the Level 1 slide; a full-width gold line under the title block draws over 1100ms, 150ms after it; the four facts fade in and rise 8px (500ms) as the line's drawn tip reaches 15/40/65/90% of its length (delays solved from the `easeOut` curve: 188, 260, 358, 561ms). Once per mount (keyed by property id), instant under reduced motion.
 - **Mobile menu:** open: the page dims to 35% (600ms) while the overlay panel fades in (600ms; the panel never moves, so it always covers the whole screen) and its contents drift in from `x: -24px`; the wordmark slides in (Level 1, 120ms delay); items drift in from 260ms, 90ms apart; each hairline draws 350ms after its item starts; then the foot rule and "BENGALURU" (from 750ms, 150ms apart). The icon's lines meet and turn into an X. Close: items leave to the right last-first with their hairlines retracting, the wordmark slides out to the right, then the panel fades out while its contents drift `+24px` (450ms, both starting once the wordmark has gone) and the page fades back up. Children timed by a parent never set their own `delay` (Motion lets it replace the parent's).
 - **Mobile filter sheet:** the pill morphs into the card through a shared `layoutId` (450ms, `easeOut`, both ways) while the backdrop fades in; the chevron turns 180°. The sections then drift in (Level 2) from 270ms, 85ms apart. Close: the card shrinks back into the pill (no exit drift first, so closing is no slower than opening) and the pill's label fades in over its last 40%; the backdrop fades out (450ms, `easeIn`). Neither the card nor its contents overflow sideways in any frame (the scroll area is `overflow-x: hidden`).
+- **Footer:** the first time 30% of it scrolls into view, its parts drift in (Level 2, 85ms apart) and the gold hairline draws from the left (900ms, in the stagger). Once only; instant under reduced motion.
 - Never animate the first property image or the detail hero image (LCP). Hero text starts on mount with no delay.
 - All of it instant under `prefers-reduced-motion: reduce` (MotionConfig for transforms, the global CSS rule for transitions).
 

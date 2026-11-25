@@ -24,34 +24,43 @@ type MobileMenuProps = {
   open: boolean;
   id: string;
   onClose: () => void;
+  /** Called once the close animation has finished and the page is released. */
+  onExited: () => void;
   /** The header's Menu button: focus goes back to it when the menu closes. */
   triggerRef: RefObject<HTMLButtonElement | null>;
 };
 
 // Full-screen menu below md (DESIGN.md §4, §5). Rendered into <body>, outside #root, so the
 // whole page behind can be made inert: focus stays in the menu without a hand-written trap.
-export function MobileMenu({ open, id, onClose, triggerRef }: MobileMenuProps) {
+export function MobileMenu({ open, id, onClose, onExited, triggerRef }: MobileMenuProps) {
   const reduceMotion = useReducedMotion();
   const closeRef = useRef<HTMLButtonElement>(null);
 
-  // Syncs with the DOM outside React (an effect is right here): while open, #root is inert and
-  // dimmed with page scroll locked (html[data-menu], index.css). On close, focus returns to the
-  // trigger; the dim stays until the overlay has left (onExitComplete below).
+  // Syncs with the DOM outside React (an effect is right here): on open, #root becomes inert and
+  // dims, page scroll locks (html[data-menu], index.css) and focus moves to Close. No cleanup:
+  // nothing is released when closing starts, only once the exit has finished (release below).
   useEffect(() => {
     if (!open) return;
-    const root = document.getElementById('root');
-    const trigger = triggerRef.current; // always rendered (hidden by CSS from md), so stable
     document.documentElement.dataset.menu = 'open';
+    const root = document.getElementById('root');
     if (root) root.inert = true;
     closeRef.current?.focus();
-    return () => {
-      if (root) root.inert = false;
-      trigger?.focus();
-    };
-  }, [open, triggerRef]);
+  }, [open]);
+
+  // Everything the page got back in one go, after the last exit frame. Releasing at the start of
+  // the close let the page move under the still-visible overlay (F20): focusing the trigger, or a
+  // menu link's scroll to the top, can slide a phone's toolbar and resize the screen.
+  function release() {
+    delete document.documentElement.dataset.menu;
+    const root = document.getElementById('root');
+    if (root) root.inert = false;
+    triggerRef.current?.focus({ preventScroll: true });
+    onExited();
+  }
 
   return createPortal(
-    <AnimatePresence onExitComplete={() => delete document.documentElement.dataset.menu}>
+    // With reduced motion there is no exit animation, so this runs straight away.
+    <AnimatePresence onExitComplete={release}>
       {open && (
         <m.div
           key="menu"
@@ -72,6 +81,12 @@ export function MobileMenu({ open, id, onClose, triggerRef }: MobileMenuProps) {
           // The panel: always full screen, it only fades (menuOverlay). The contents drift.
           className="fixed inset-0 z-50 overflow-y-auto bg-espresso text-cream md:hidden"
         >
+          {/* Backing as tall as the largest viewport (lvh): if a phone's toolbar slides and the
+              screen grows, the page never shows below the panel before it resizes. */}
+          <div
+            aria-hidden
+            className="pointer-events-none fixed inset-x-0 top-0 -z-10 h-lvh min-h-full bg-espresso"
+          />
           {/* w-full on each row: `page` centres with auto margins, which shrinks flex children. */}
           <m.div variants={menuContents} className="flex min-h-full flex-col">
             {/* Same row as the header, so Close sits exactly where Menu was. */}

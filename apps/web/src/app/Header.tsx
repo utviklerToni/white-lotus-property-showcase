@@ -17,6 +17,9 @@ export function Header() {
   // Back) gives a new location key and closes it, and so does widening the screen past md.
   const [openedOn, setOpenedOn] = useState<string | null>(null);
   const menuOpen = isMobile && openedOn === location.key;
+  // True from opening until the close animation has finished (MobileMenu's onExited), so the
+  // button's state changes only once the page is released, like everything else.
+  const [menuShown, setMenuShown] = useState(false);
 
   return (
     <header
@@ -63,12 +66,15 @@ export function Header() {
         <button
           ref={triggerRef}
           type="button"
-          aria-expanded={menuOpen}
+          aria-expanded={menuShown}
           aria-controls={menuId}
-          onClick={() => setOpenedOn(location.key)}
+          onClick={() => {
+            setOpenedOn(location.key);
+            setMenuShown(true);
+          }}
           className="caps flex min-h-11 items-center gap-3 text-[11px] text-navy md:hidden"
         >
-          {menuOpen ? 'Close' : 'Menu'}
+          {menuShown ? 'Close' : 'Menu'}
           <MenuIcon />
         </button>
       </div>
@@ -76,6 +82,7 @@ export function Header() {
         open={menuOpen}
         id={menuId}
         onClose={() => setOpenedOn(null)}
+        onExited={() => setMenuShown(false)}
         triggerRef={triggerRef}
       />
     </header>

@@ -79,7 +79,9 @@ export function MobileMenu({ open, id, onClose, onExited, triggerRef }: MobileMe
             if (event.key === 'Tab') wrapFocus(event);
           }}
           // The panel: always full screen, it only fades (menuOverlay). The contents drift.
-          className="fixed inset-0 z-50 overflow-y-auto bg-espresso text-cream md:hidden"
+          // overflow-x-hidden: with overflow-y auto the panel also scrolls sideways, and the
+          // contents drifting 24px right on close showed a horizontal scrollbar (F21).
+          className="fixed inset-0 z-50 overflow-x-hidden overflow-y-auto bg-espresso text-cream md:hidden"
         >
           {/* Backing as tall as the largest viewport (lvh): if a phone's toolbar slides and the
               screen grows, the page never shows below the panel before it resizes. */}

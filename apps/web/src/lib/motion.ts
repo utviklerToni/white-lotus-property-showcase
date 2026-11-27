@@ -266,8 +266,8 @@ export const pillLabel: Variants = {
   },
 };
 
-/** The dimmed backdrop behind the card. */
-export const sheetBackdrop: Variants = {
+/** A dimmed backdrop behind a card (the filter sheet, the "Enquiry sent" card). */
+export const backdrop: Variants = {
   [HIDDEN]: { opacity: 0 },
   [SHOWN]: { opacity: 1, transition: { duration: DURATION.morph, ease: easeOut } },
   [EXIT]: { opacity: 0, transition: { duration: DURATION.morph, ease: easeIn } },

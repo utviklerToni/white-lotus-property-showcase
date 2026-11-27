@@ -230,7 +230,7 @@ Visual design for every page: **`docs/design/DESIGN.md`** and its mocks. This se
 **`/properties/:id` — Detail**
 
 - Full-bleed hero with status, `No. · location`, name and a facts list (price, bedrooms, size, location); overview, specs, details.
-- Inquiry form in a navy band beside the content (desktop, sticky) or below it (mobile).
+- Inquiry form in a navy band beside the content (desktop, sticky) or below it (mobile). Sending, error and success feedback (an "Enquiry sent" card, then a quiet success line) per DESIGN.md §4.
 - Success message after submit, form resets. Server errors show without losing what the user typed.
 - 404 state for an unknown id.
 
